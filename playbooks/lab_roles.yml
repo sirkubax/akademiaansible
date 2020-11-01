@@ -1,0 +1,20 @@
+---
+
+- hosts: apache
+
+  pre_tasks:
+    - include_vars: "{{ item }}"
+      with_items: "{{ vars_files_var }}"
+
+  roles:
+    - przykladowa_rola
+
+  tasks:
+    - name: "show time"
+      shell: date
+
+    - inclue_role:
+        name: przykladowa_rola
+
+  
+

@@ -1,0 +1,16 @@
+- hosts: naszaaplikacja_loadbalancer
+
+  vars:
+    katalog_glowny: /var/www/szkolenie
+    katalog_aplikacji: "{{ katalog_glowny }}/aplikacja"
+    lista_portow: [5081, 5082]
+
+#### apache na wybranym porcie
+
+  become: true
+
+  pre_tasks: []
+
+  roles:
+    - przykladowy_loadbalancer
+

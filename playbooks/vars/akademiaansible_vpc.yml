@@ -1,0 +1,75 @@
+
+ami: ami-05c424d59413a2876 #u20.04
+region: eu-west-2
+ansible_ssh_private_key_file: ~/.ssh/szkolenie_05_london.pem
+#ssh_key: '~/.ssh/so1securefr.prv' #Your ssh key that is used to create the instance
+location: london
+subnet: subnet-0d096e74fce44c4d5
+
+role: mgmtakademiaansible
+
+env_name: 'akademiaansible'
+
+#allow change VPC (routing)
+allow_vpc_change: True
+
+# VPC
+akademiaansible_vpc: 
+    vpc:
+        name: akademiaansible
+        cidr_block: 10.238.0.0/22
+        subnets:
+          - cidr: 10.238.0.0/24
+            resource_tags:
+                Name: akademiaansible_pub
+    route:
+      - subnets:
+          - 10.238.0.0/24
+        routes:
+          - dest: 0.0.0.0/0
+            gw: igw
+        resource_tags:
+          Name:  akademiaansible default route
+
+    security_groups:
+        name: akademiaansible-security-group
+        description: akademiaansible SG
+        rules:
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 89.70.92.47/32
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 87.206.148.14/32
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 89.70.92.163/32
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 89.70.90.8/32
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 212.67.156.30/32   #muszynski homeA
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 10.218.0.0/24 
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 35.176.206.110/32 #mgmt 
+          - proto: icmp
+            from_port: -1
+            to_port: -1
+            cidr_ip: 0.0.0.0/0
+    ec2_eip:
+        instance_A:
+          tag: 1A
+          ip: 18.132.121.80
+          name: 'mgmtakademiaansible-server'
+    instance_group: akademiaansible1

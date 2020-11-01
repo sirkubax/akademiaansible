@@ -1,0 +1,21 @@
+- hosts: naszaaplikacja
+
+
+  tasks:
+  - name: napisz ze jest dobra pogoda
+    shell: echo 'dzisiaj pogoda jest ok'
+    register: twojazmienna
+
+  - name: potwierdzam
+    shell: echo 'dzisiaj pogoda jest ok'
+
+#  - name: wypisz date
+
+#  - name: sprawdz curl
+
+#  - name: sprawdz warunki logiczne
+#    assert:
+#      that:
+
+#  - name: zawsze blad
+#    command: /usr/bin/false

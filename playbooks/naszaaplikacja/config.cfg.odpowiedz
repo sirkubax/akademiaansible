@@ -1,0 +1,12 @@
+[config]
+port = {{ port }}
+nazwa = {{ lookup('pipe', 'whoami') }}
+host = przykladowa_nazwa_serwera
+
+mysql:
+  port: 3306
+  username: szkoelnie_user
+  pass: sekret
+  dbname: szkolenie_db
+  host: 3.10.56.184
+
