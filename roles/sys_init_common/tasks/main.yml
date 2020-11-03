@@ -24,6 +24,7 @@
     - whois #ansible
     - libffi-dev #ansible
     - unzip
+    - mcedit
     #    - iproute2
     #    - pv
     #    - iotop

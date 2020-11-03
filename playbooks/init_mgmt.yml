@@ -6,7 +6,7 @@
   become: True
 
   vars:
-      vars_files_var: ["vars/szkolenie.yml", "vars/szkolenie_vault.yml"]
+      vars_files_var: ["vars/akademiaansible.yml", "vars/akademiaansible_vault.yml"]
       init_userspace: True
       group: mgmt
       users: "{{ users_vault }}"
@@ -54,7 +54,7 @@
 
     - name: "upload ssh key"
       copy: 
-          src: roles/sys_manage_keys/files/id_rsa_szkolenie
+          src: ../roles/sys_manage_keys/files/id_rsa_szkolenie
           dest: "/home/{{ item.user }}/.ssh/"
           mode: 0400
           owner: "{{ item.user }}"
