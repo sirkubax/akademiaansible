@@ -17,23 +17,24 @@
         pkg:
           - apache2
 
-#    - name: 'zainstaluj aplikacje apache2 i pozostale pakiety przy pomocy with_items'
+#    - name: 'Opcjonalnie zainstaluj aplikacje apache2 i pozostale pakiety przy pomocy with_items'
+#
+#    ## wgrywamy do katalogu katalog_glowny
+#    # dest: "{{ katalog_glowny }}"
+#    - name: 'klonuj repozytorium aplikacji'
 #
 #    - name: 'wgraj definicje virtualhost naszaaplikacja.apache.conf jako template'
+#
+#    - name: 'Wgraj sparametryzowany naszaaplikacja.wsgi (jako template)'
 #
 #    - name: 'wlacz virtualhost'
 #
 #    - name: 'konfiguruj apache do nasluchiwania na wybranym porcie'
 #
-#    ## W instrukcji jest blad - wgrywamy do katalogu
-#    # dest: "{{ katalog_glowny }}"
-#    - name: 'klonuj repozytorium aplikacji'
-#  
-#
 #    - name: 'zainicjalizuj virtualenv i zainstaluj zaleznosci' 
 #
-#    - name: 'Wgraj sparametryzowany naszaaplikacja.wsgi (jako template)'
-#
 #    - name: 'utworz katalog na logi'
+#
+#    - name: 'Wgraj sparametryzowany config.cfg (jako template)'
 #
 #    - name: 'restart apache'

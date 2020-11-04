@@ -3,6 +3,9 @@
     apt: update_cache=yes cache_valid_time=7200
     changed_when: False
 
+  - name: 2020 - bug - force apt update
+    shell: apt-get update
+
   - name: install packages
     apt: name={{ item }}
     with_items:
