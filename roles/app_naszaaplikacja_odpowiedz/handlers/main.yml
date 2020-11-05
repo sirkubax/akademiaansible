@@ -13,6 +13,7 @@
     port: 80 
     timeout: 15 
     delay: 5
+  ignore_errors: yes
 
 - name: Wait for instances to listen on port 5081
   wait_for: 
