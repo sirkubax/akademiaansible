@@ -2,7 +2,7 @@
 export ANS_ROOT_DIR="$(readlink -m $(readlink -m "$(dirname "${BASH_SOURCE[0]}")"))"
 #export EC2_INI_PATH=$ANS_ROOT_DIR/etc/inv/ec2.ini
 #export ANSIBLE_VAULT_PASSWORD_FILE=~/.ssh/vault_pass.txt
-#export ANSIBLE_VAULT_PASSWORD_FILE=~/.ssh/vault_pass_11.txt
+export ANSIBLE_VAULT_PASSWORD_FILE=~/.ssh/vault_pass_11.txt
 export ANSIBLE_SSH_CONTROL_PATH="/tmp/ansible-ssh-$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c8)-%%h-%%p-%%r"
 export ANSIBLE_CONFIG="$(pwd)/ansible.cfg"
 #JM never keep this enabled #export ANSIBLE_KEEP_REMOTE_FILES=1
