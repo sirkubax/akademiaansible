@@ -23,6 +23,7 @@ if [ -z "$VIRTUAL_ENV" ]; then
     echo '-- No virtualenv detected; creating'
     virtualenv $ANS_ROOT_DIR/$VENV_NAME --python=python3 || (echo '!!! virtualenv creation failed' && return)
     mkdir ~/.ansible
+    touch ~/.ssh/vault_pass_11.txt
     __venv_created=true
   fi
   source $ANS_ROOT_DIR/$VENV_NAME/bin/activate

@@ -15,8 +15,8 @@ localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env pyth
 
 #grupa apache
 [apache]
-10.238.0.230
-10.238.0.134
+3.8.93.22
+3.11.79.187
 
 [backend]
 10.238.0.158
@@ -26,17 +26,12 @@ localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env pyth
 apache
 backend
 
-#grupa wordpress
 [wordpress]
-#10.218.0.222
 3.10.235.80
-#3.8.8.38
 
-#grupa loadbalancer
 [loadbalancer]
 3.9.114.245
 
-#grupa mysql
 [mysql]
 10.218.0.117
 
