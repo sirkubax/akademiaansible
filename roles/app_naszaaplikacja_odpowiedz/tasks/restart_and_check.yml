@@ -5,6 +5,9 @@
     daemon_reload: yes
   become: yes
   delegate_to: "{{ node }}"
+  notify: 
+    - Wait for instances to listen on port 80
+    - Wait for instances to listen on port 5081
 
 - name: check if service is up                                                                                 
   wait_for:

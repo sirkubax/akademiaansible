@@ -8,9 +8,6 @@
 
 - name: restart apache safe
   include_tasks: restart_main.yml
-  notify: 
-    - Wait for instances to listen on port 80
-    - Wait for instances to listen on port 5081
 
 - name: Wait for instances to listen on port 80
   wait_for: 
