@@ -32,8 +32,8 @@ mysql_enablerepo: ""
 mysql_packages:
   - python3-pymysql
     #https://github.com/geerlingguy/ansible-role-mysql/issues/410
+  - mysql-server
 #   - mysql
-#   - mysql-server
 #   - MySQL-python
 
 mysql_python_package_debian: python3-mysqldb
