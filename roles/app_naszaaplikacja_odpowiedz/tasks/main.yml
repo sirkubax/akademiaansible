@@ -16,6 +16,10 @@
     - libapache2-mod-wsgi
       #- libapache2-mod-wsgi-py3 #dla python3
     - python-dev
+    - python-virtualenv
+    - python3-virtualenv
+    - python3-pip
+    - python-pip
 
 - git:
     repo: https://github.com/sirkubax/naszaaplikacja.git
