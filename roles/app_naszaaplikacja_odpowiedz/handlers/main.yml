@@ -23,3 +23,5 @@
     timeout: 15 
     delay: 5
 
+- name: restart apache safe
+  include_tasks: restart_main.yml

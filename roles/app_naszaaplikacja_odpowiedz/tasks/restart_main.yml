@@ -1,0 +1,7 @@
+- block:
+  - include_tasks: restart_and_check.yml
+    loop: '{{ play_hosts }}'
+    loop_control:
+      loop_var: node
+  any_errors_fatal: true
+

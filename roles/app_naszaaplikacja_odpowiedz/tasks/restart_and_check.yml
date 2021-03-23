@@ -1,0 +1,15 @@
+- name: "restart apache"                                                         
+  systemd:
+    name: apache2
+    state: restarted
+    daemon_reload: yes
+  become: yes
+  delegate_to: "{{ node }}"
+
+- name: check if service is up                                                                                 
+  wait_for:
+    port: 80
+    delay: 10
+    timeout: 40
+  delegate_to: "{{ node }}"                                               
+
