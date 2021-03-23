@@ -40,11 +40,10 @@ backend
 3.8.158.189
 
 [naszaaplikacja]
-35.176.36.91
+192.168.60.12
 
 [naszaaplikacja_mysql]
 192.168.60.12
-35.176.36.91
 
 [naszaaplikacja_loadbalancer]
 35.176.36.91
