@@ -6,12 +6,11 @@
   become: yes
   delegate_to: "{{ node }}"
   notify: 
-    - Wait for instances to listen on port 80
     - Wait for instances to listen on port 5081
 
 - name: check if service is up                                                                                 
   wait_for:
-    port: 80
+    port: "{{ port }}"
     delay: 10
     timeout: 40
   delegate_to: "{{ node }}"                                               
