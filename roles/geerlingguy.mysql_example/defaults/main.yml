@@ -34,6 +34,8 @@ mysql_enablerepo: ""
 #   - mysql-server
 #   - MySQL-python
 
+mysql_python_package_debian: python3-mysqldb
+
 # MySQL connection settings.
 mysql_port: "3306"
 mysql_bind_address: '0.0.0.0'
@@ -105,17 +107,17 @@ mysql_config_include_files: []
 
 # Databases.
 mysql_databases: []
-#   - name: wordpress
+#   - name: example
 #     collation: utf8_general_ci
 #     encoding: utf8
 #     replicate: 1
 
 # Users.
 mysql_users: []
-#   - name: wpuser
-#     host: "%"
-#     password: secret123
-#     priv: "*.*:ALL"
+#   - name: example
+#     host: 127.0.0.1
+#     password: secret
+#     priv: *.*:USAGE
 
 # Replication settings (replication is only enabled if master/user have values).
 mysql_server_id: "1"
