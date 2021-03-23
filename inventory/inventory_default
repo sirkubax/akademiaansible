@@ -10,17 +10,17 @@ localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env pyth
 [mgmt]
 #mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/id_rsa_szkolenie
 #mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/szkolenie_05_london.pem
-18.132.121.80 
-
+192.168.60.10 ansible_ssh_private_key_file=~/.ssh/example_key
 
 #grupa apache
 [apache]
-3.8.93.22
-3.11.79.187
+192.168.60.11
+192.168.60.12
+#3.11.79.187
 
 [backend]
+192.168.60.12
 10.238.0.158
-
 
 [prod:children]
 apache
@@ -33,6 +33,7 @@ backend
 3.9.114.245
 
 [mysql]
+192.168.60.12
 10.218.0.117
 
 [zabbix_agent]
@@ -42,6 +43,7 @@ backend
 35.176.36.91
 
 [naszaaplikacja_mysql]
+192.168.60.12
 35.176.36.91
 
 [naszaaplikacja_loadbalancer]
