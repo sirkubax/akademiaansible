@@ -40,6 +40,7 @@ backend
 3.8.158.189
 
 [naszaaplikacja]
+192.168.60.11
 192.168.60.12
 
 [naszaaplikacja_mysql]
