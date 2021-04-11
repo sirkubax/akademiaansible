@@ -15,11 +15,11 @@ mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/szkolenie_05_london.pem
 
 #grupa apache
 [apache]
-3.8.93.22
-3.11.79.187
+18.132.243.18
+18.130.233.230
 
 [backend]
-10.238.0.158
+3.10.162.88
 
 
 [prod:children]
