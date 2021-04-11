@@ -29,10 +29,14 @@ mysql_enablerepo: ""
 
 # Define a custom list of packages to install; if none provided, the default
 # package list from vars/[OS-family].yml will be used.
-# mysql_packages:
+mysql_packages:
+  - python3-pymysql
+    #https://github.com/geerlingguy/ansible-role-mysql/issues/410
+  - mysql-server
 #   - mysql
-#   - mysql-server
 #   - MySQL-python
+
+mysql_python_package_debian: python3-mysqldb
 
 # MySQL connection settings.
 mysql_port: "3306"
@@ -105,17 +109,17 @@ mysql_config_include_files: []
 
 # Databases.
 mysql_databases: []
-#   - name: wordpress
+#   - name: example
 #     collation: utf8_general_ci
 #     encoding: utf8
 #     replicate: 1
 
 # Users.
 mysql_users: []
-#   - name: wpuser
-#     host: "%"
-#     password: secret123
-#     priv: "*.*:ALL"
+#   - name: example
+#     host: 127.0.0.1
+#     password: secret
+#     priv: *.*:USAGE
 
 # Replication settings (replication is only enabled if master/user have values).
 mysql_server_id: "1"

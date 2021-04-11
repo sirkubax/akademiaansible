@@ -1,0 +1,33 @@
+---
+#Uruchomienie:
+#~/szkolenie$ ansible-playbook playbooks/install_apache.yml
+
+
+- pre_tests:
+    - include_vars: myfile.yml
+
+  hosts: apache
+
+  name: play name
+
+  tasks:
+  - name: update cache 
+    apt: 
+      update_cache: yes 
+      cache_valid_time: 7200
+    changed_when: False
+    become: True
+
+  - name: install packages
+    apt: 
+      pkg:
+        - apache2
+        - htop
+    become: True
+
+  - name: Wait for instances to listen on port 80
+    wait_for: state=started host=localhost port=80 timeout=15 delay=5
+
+  roles:
+    - apache
+

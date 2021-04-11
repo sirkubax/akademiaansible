@@ -1,0 +1,10 @@
+- hosts: apache
+
+  tasks:
+     - ping:
+
+     - shell: df -h; date
+
+  roles:
+    - role: geerlingguy.mysql
+      become: true

@@ -21,7 +21,6 @@ mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/szkolenie_05_london.pem
 [backend]
 3.10.162.88
 
-
 [prod:children]
 apache
 backend
@@ -33,16 +32,18 @@ backend
 3.9.114.245
 
 [mysql]
+192.168.60.12
 10.218.0.117
 
 [zabbix_agent]
 3.8.158.189
 
 [naszaaplikacja]
-35.176.36.91
+192.168.60.11
+192.168.60.12
 
 [naszaaplikacja_mysql]
-35.176.36.91
+192.168.60.12
 
 [naszaaplikacja_loadbalancer]
 35.176.36.91

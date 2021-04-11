@@ -84,6 +84,10 @@ The formats of these are the same as in the `mysql_user` module.
 
 (RedHat/CentOS only) If you have enabled any additional repositories (might I suggest geerlingguy.repo-epel or geerlingguy.repo-remi), those repositories can be listed under this variable (e.g. `remi,epel`). This can be handy, as an example, if you want to install later versions of MySQL.
 
+    mysql_python_package_debian: python3-mysqldb
+
+(Ubuntu/Debian only) If you need to explicitly override the MySQL Python package, you can set it here. Set this to `python-mysqldb` if using older distributions running Python 2.
+
     mysql_port: "3306"
     mysql_bind_address: '0.0.0.0'
     mysql_datadir: /var/lib/mysql
@@ -118,9 +122,11 @@ The rest of the settings in `defaults/main.yml` control MySQL's memory usage and
     mysql_expire_logs_days: "10"
     mysql_replication_role: ''
     mysql_replication_master: ''
-    mysql_replication_user: []
+    mysql_replication_user: {}
 
-Replication settings. Set `mysql_server_id` and `mysql_replication_role` by server (e.g. the master would be ID `1`, with the `mysql_replication_role` of `master`, and the slave would be ID `2`, with the `mysql_replication_role` of `slave`). The `mysql_replication_user` uses the same keys as `mysql_users`, and is created on master servers, and used to replicate on all the slaves.
+Replication settings. Set `mysql_server_id` and `mysql_replication_role` by server (e.g. the master would be ID `1`, with the `mysql_replication_role` of `master`, and the slave would be ID `2`, with the `mysql_replication_role` of `slave`). The `mysql_replication_user` uses the same keys as individual list items in `mysql_users`, and is created on master servers, and used to replicate on all the slaves.
+
+`mysql_replication_master` needs to resolve to an IP or a hostname which is accessable to the Slaves (this could be a `/etc/hosts` injection or some other means), otherwise the slaves cannot communicate to the master.
 
 ### Later versions of MySQL on CentOS 7
 

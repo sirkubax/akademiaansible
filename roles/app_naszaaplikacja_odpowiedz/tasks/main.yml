@@ -14,8 +14,10 @@
   loop:
     - apache2
     - libapache2-mod-wsgi
-      #- libapache2-mod-wsgi-py3 #dla python3
+    - libapache2-mod-wsgi-py3 #dla python3
     - python-dev
+    - python3-virtualenv
+    - python3-pip
 
 - git:
     repo: https://github.com/sirkubax/naszaaplikacja.git
@@ -28,7 +30,7 @@
     virtualenv: "{{ katalog_aplikacji }}/venv"
   name: 'zainicjalizuj virtualenv i zainstaluj zaleznosci' 
   notify:
-    - restart apache
+    - restart apache safe
 
 - name: 'wgraj definicje virtualhost naszaaplikacja.apache.conf{{ port }} jako template'
   template:
@@ -36,14 +38,14 @@
       dest: "/etc/apache2/sites-available/naszaaplikacja.apache{{ port }}.conf"
       backup: True
   notify:
-    - restart apache
+    - restart apache safe
 
 - name: 'usun /etc/apache2/sites-available/naszaaplikacja.apache jako template'
   file:
     path: "/etc/apache2/sites-available/naszaaplikacja.apache"
     state: absent
   notify:
-    - restart apache
+    - restart apache safe
 
 - name: 'konfiguruj apache do nasluchiwania na wybranym porcie'
   lineinfile: 
@@ -51,7 +53,7 @@
     line: "Listen {{ port }}"
     regexp: "^Listen {{ port }}"
   notify:
-    - restart apache
+    - restart apache safe
 
 - name: 'wylacz port 80'
   lineinfile: 
@@ -59,7 +61,7 @@
     regexp: "^Listen 80"
     state: absent
   notify:
-    - restart apache
+    - restart apache safe
 
 - name: 'wlacz virtualhost'
   shell: a2ensite {{ item }}
@@ -68,7 +70,7 @@
   loop: 
     - "naszaaplikacja.apache{{ port }}.conf"
   notify:
-    - restart apache
+    - restart apache safe
 
 - name: 'Wgraj sparametryzowany naszaaplikacja.wsgi (jako template)'
   template:
@@ -76,7 +78,7 @@
       dest: "{{ katalog_aplikacji }}"
       backup: True
   notify:
-    - restart apache
+    - restart apache safe
 
 - name: 'Wgraj sparametryzowany config.cfg (jako template)'
   template:
@@ -84,7 +86,7 @@
       dest: "{{ katalog_aplikacji }}"
       backup: True
   notify:
-    - restart apache
+    - restart apache safe
 
 - name: 'utworz katalog na logi'
   file:
@@ -94,4 +96,4 @@
     group: www-data
     mode: 0755
   notify:
-    - restart apache
+    - restart apache safe
