@@ -19,7 +19,7 @@ mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/szkolenie_05_london.pem
 18.130.233.230
 
 [backend]
-3.10.162.88
+35.178.178.253
 
 [prod:children]
 apache
