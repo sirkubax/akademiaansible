@@ -45,6 +45,10 @@
     - name: "stat for {{ home }}/.bashrc file"
       stat: path="/home/{{ item.user }}/.bashrc"
       with_items: "{{ users }}"
+
+#if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+#    tmux a -t default || exec tmux new -s default && exit;
+# fi
     
     - name: "fix screen 'Cant gett tty'"
       lineinfile: >

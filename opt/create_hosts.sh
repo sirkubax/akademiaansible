@@ -42,4 +42,4 @@ ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=bac
 
 for i in `seq -w 01 09`; do ansible-playbook playbooks/create_aws_instance.yml -e "type=t3.nano hostname=naszaaplikacja01-szk$i role=naszaaplikacja"; done
 #
-ansible-playbook playbooks/create_aws_instance.yml -e "type=t3.nano hostname=awx01 role=awx"
+#ansible-playbook playbooks/create_aws_instance.yml -e "type=t3.nano hostname=awx01 role=awx"
