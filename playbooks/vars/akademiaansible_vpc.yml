@@ -1,10 +1,15 @@
 
 ami: ami-05c424d59413a2876 #u20.04
 region: eu-west-2
-ansible_ssh_private_key_file: ~/.ssh/szkolenie_05_london.pem
+#ansible_ssh_private_key_file: ~/.ssh/szkolenie_05_london.pem
+ansible_ssh_private_key_file: ~/.ssh/szkolenie_05_london_sodo.pem
 #ssh_key: '~/.ssh/so1securefr.prv' #Your ssh key that is used to create the instance
 location: london
-subnet: subnet-0d096e74fce44c4d5
+#my
+#subnet: subnet-0d096e74fce44c4d5
+#sodo
+subnet: subnet-084526d4a603f6100
+key: szkolenie_05_london_sodo
 
 role: mgmtakademiaansible
 
@@ -70,6 +75,7 @@ akademiaansible_vpc:
     ec2_eip:
         instance_A:
           tag: 1A
-          ip: 18.132.121.80
+          #ip: 18.132.121.80
+          ip: 18.133.152.204
           name: 'mgmtakademiaansible-server'
     instance_group: akademiaansible1

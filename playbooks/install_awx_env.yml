@@ -1,1 +1,42 @@
 - hosts: awx
+  become: true
+
+  tasks:
+  - name: 'zainstaluj aplikacje apache2 i libapache2-mod-wsgi przekazując listę'
+    apt: 
+      pkg:
+        - python-dev
+        - python3-virtualenv
+        - python3-pip
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg
+        - lsb-release
+
+#https://docs.docker.com/engine/install/ubuntu/
+          
+#sudo apt-get remove docker docker-engine docker.io containerd runc
+#https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+  - name: add gpg key
+    ansible.builtin.apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      keyring: /usr/share/keyrings/docker-archive-keyring.gpg
+#
+#echo \
+#  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+#    $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+
+  - name: 'zainstaluj aplikacje apache2 i libapache2-mod-wsgi przekazując listę'
+    apt: 
+      pkg:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+
+  - name: 'zainicjalizuj virtualenv i zainstaluj zaleznosci' 
+    pip: 
+      name:
+        - docker-compose

@@ -1,9 +1,10 @@
 ami: ami-05c424d59413a2876 #u20.04
 region: eu-west-2
-subnet: subnet-0d096e74fce44c4d5
+#subnet: subnet-0d096e74fce44c4d5
+subnet: subnet-084526d4a603f6100
 sg: akademiaansible-security-group
-key: szkolenie_05_london
-ansible_ssh_private_key_file: '~/.ssh/szkolenie_05_london.pem'
+key: szkolenie_05_london_sodo
+ansible_ssh_private_key_file: '~/.ssh/szkolenie_05_london_sodo.pem'
 location: london_akademiaansible
 location2: london
 assign_public_ip: True
