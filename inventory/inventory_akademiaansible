@@ -24,7 +24,7 @@ localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env pyth
 #18.134.146.248
 
 [backend]
-10.238.0.158
+10.238.0.234
 
 
 [prod:children]
