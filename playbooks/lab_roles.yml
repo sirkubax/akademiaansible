@@ -3,8 +3,8 @@
 - hosts: apache
 
   pre_tasks:
-    - include_vars: "{{ item }}"
-      with_items: "{{ vars_files_var }}"
+    - set_facts: 
+        jakas_zmienna: 1234
 
   roles:
     - przykladowa_rola

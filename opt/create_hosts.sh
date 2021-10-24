@@ -40,6 +40,11 @@ ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=bac
 #for i in `seq -w 01 15`; do ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wordpress02_szk$i role=wordpress"; done
 #ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.large hostname=awx role=awx"
 
-for i in `seq -w 01 09`; do ansible-playbook playbooks/create_aws_instance.yml -e "type=t3.nano hostname=naszaaplikacja01-szk$i role=naszaaplikacja"; done
+for i in `seq -w 01 12`; do ansible-playbook playbooks/create_aws_instance.yml -e "type=t3.nano hostname=naszaaplikacja01-szk$i role=naszaaplikacja"; done
 #
-#ansible-playbook playbooks/create_aws_instance.yml -e "type=t3.nano hostname=awx01 role=awx"
+ansible-playbook playbooks/create_aws_instance.yml -e "type=t3.medium hostname=awx01 role=awx"
+
+#if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+#    tmux a -t default || exec tmux new -s default && exit;
+#fi
+
