@@ -7,7 +7,7 @@ mysql_databases:
 mysql_users: 
    - name: wpuser
      host: "%"
-     password: secret123
+     password: "{{ vault_password_user_wpuser }}"
      priv: "*.*:ALL"
 
 

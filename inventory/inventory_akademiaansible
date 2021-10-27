@@ -19,7 +19,9 @@ localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env pyth
 
 #grupa apache
 [apache]
+#18.134.10.[192:194]
 18.134.10.192
+#costam.mojadomena.pl
 18.170.42.90
 #10.238.0.65
 #10.238.0.16
@@ -53,10 +55,10 @@ backend
 3.8.158.189
 
 [naszaaplikacja]
-35.176.51.84
+18.134.138.177
 
 [naszaaplikacja_mysql]
-35.176.51.84
+13.40.34.145
 
 [naszaaplikacja_loadbalancer]
 35.176.51.84

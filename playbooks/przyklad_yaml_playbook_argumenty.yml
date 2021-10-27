@@ -3,21 +3,34 @@
   gather_facts: True
 
 - { hosts: mysql, gather_facts: False }
+  
+- hosts: mysql
+  gather_facts: False
 
 - hosts: all
 
   vars:
     zmiennaA: 1234
 
+przyklad:
+    cytryna: kwasna
+    ala: nowa
+    beza: swieza
+    dzem: malinowy
+
   tasks:
     - ping:
       ignore_errors: True
 
-    - name: restart apache
+    - when: true
+      tags:
+          - jakistag
       service: 
-        name: apache2
         state: restarted
+        name: apache2
         enabled: True
+        owner: ubuntu
+      name: restart apache
       register: wynik_restartu
 
     - name: wypisz na ekran

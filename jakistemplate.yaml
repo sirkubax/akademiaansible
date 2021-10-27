@@ -1,0 +1,2 @@
+wartosc zmiennej: {{ ciekawa_zmienna }}
+ip na maszynie: {{ ansible_default_ipv4.address }}

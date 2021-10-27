@@ -2,19 +2,29 @@
 
 - hosts: apache
 
+  #     vars:
+  #       sciezka_i_nazwa: ~/szkolenie_role_szkolenie12
+
   pre_tasks:
-    - set_facts: 
+    - set_fact: 
         jakas_zmienna: 1234
+      tags:
+        - always
 
   roles:
     - przykladowa_rola
 
-  tasks:
-    - name: "show time"
-      shell: date
+    - role: sys_init_common
+      become: True
 
-    - inclue_role:
-        name: przykladowa_rola
+    - role: app_stworz_katalog
+      vars:
+        sciezka_i_nazwa: ~/szkolenie_role_szkolenie12
 
-  
+    - role: geerlingguy.apache
+      become: True
+     
 
+#- hosts: mysql_group
+#  
+#  tasks: 

@@ -3,13 +3,14 @@
   become: true
 
   #zmienne przydatne do parametryzacji wgrania, oraz szablonowania konfiguracji
-  #vars:
-  #  katalog_aplikacji: /var/www/szkolenie
-  #  log_dir: /var/www/szkolenie/logs/
-  #  port: 5001
+  vars:
+    katalog_glowny: /var/www/szkolenie.pl
+    katalog_aplikacji: /var/www/szkolenie.pl/aplikacja
+    log_dir: /var/www/szkolenie.pl/logs/
+    port: 5001
 
   pre_tasks: []
 
   roles:
-    - app_naszaaplikacja
+    - nasza_aplikacja
 

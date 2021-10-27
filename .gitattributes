@@ -1,5 +1,5 @@
 inventory/host_vars/*/*_vault.yml diff=ansible-vault
-inventory/group_vars_vars/*/*_vault.yml diff=ansible-vault
+inventory/group_vars/*/*_vault.yml diff=ansible-vault
 playbooks/*/*_vault.yml diff=ansible-vault
 playbooks/vars/szkolenie_vault.yml diff=ansible-vault
 

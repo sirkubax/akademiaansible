@@ -4,6 +4,8 @@
 #
 - hosts: apache
 
+  become: True
+
   #vars_files:                               
   #  - ["{{ system_version_file }}"]       
   #  - ["{{ system_version_file }}_vault"] 
@@ -30,6 +32,11 @@
   roles:
     - przykladowa_rola
     - { role: sys_init_common, become: True, when: "inventory_hostname == groups['apache'][0]" }
+
+    - role: sys_init_common
+      become: True
+      when: "inventory_hostname == groups['apache'][0]"
+
     - { role: geerlingguy.apache_example }
     - { role: mid_katalog_szkolenie, tags: katalog }
 

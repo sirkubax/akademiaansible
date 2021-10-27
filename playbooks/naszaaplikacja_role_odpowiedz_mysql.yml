@@ -1,20 +1,5 @@
 - hosts: naszaaplikacja_mysql
 
-  become: true
-
-  #zmienne przydatne do parametryzacji wgrania, oraz szablonowania konfiguracji
-  #vars:
-  #  katalog_aplikacji: /var/www/szkolenie
-  #  log_dir: /var/www/szkolenie/logs/
-  #  port: 5001
-
-  pre_tasks: []
-
-  roles:
-    - { role: geerlingguy.mysql_example }
-
-
-
 - hosts: naszaaplikacja
 
   become: true

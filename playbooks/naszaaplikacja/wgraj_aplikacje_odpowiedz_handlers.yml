@@ -9,6 +9,12 @@
     port: 5081
 
   tasks:
+    - name: wylacz aplikacje z loadbalancera - wykonaj z mojego locahost albo z maszyn mgmt
+      shell: echo 1 #> /proc/haproxy/socket.1
+      delegate_to: localhost
+
+
+
     - name: 'zainstaluj aplikacje apache2 i libapache2-mod-wsgi przekazując listę'
       apt: 
         pkg:

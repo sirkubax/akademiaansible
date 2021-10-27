@@ -14,27 +14,115 @@
   tasks:
     - name: 'zainstaluj aplikacje apache2 i libapache2-mod-wsgi przekazując listę'
       apt: 
-        pkg:
+        name:
           - apache2
+          - libapache2-mod-wsgi-py3
+          - python-dev
+
+        #apt-get install libapache2-mod-wsgi python-dev apache2
+
+    #- name: 'zainstaluj aplikacje apache2 i libapache2-mod-wsgi przekazując listę'
+    #  apt: 
+    #    name: "{{ item }}"
+    #  loop:
+    #      - apache2
+    #      - libapache2-mod-wsgi 
+    #      - python-dev
+    #    #apt-get install python-dev
+    #    #apt-get install apache2
+    #    #apt-get install libapache2-mod-wsgi
+    #    
+    #- name: 'dodaj usera'
+    #  user: 
+    #    name: "{{ item }}"
+    #  loop:
+    #      - kuba
+    #      - marek
+    #    #useradd kuba
+    #    #useradd marek
+
 
 #    - name: 'Opcjonalnie zainstaluj aplikacje apache2 i pozostale pakiety przy pomocy with_items'
 #
 #    ## wgrywamy do katalogu katalog_glowny
 #    # dest: "{{ katalog_glowny }}"
-#    - name: 'klonuj repozytorium aplikacji'
-#
-#    - name: 'wgraj definicje virtualhost naszaaplikacja.apache.conf jako template'
-#
-#    - name: 'Wgraj sparametryzowany naszaaplikacja.wsgi (jako template)'
-#
-#    - name: 'wlacz virtualhost'
-#
-#    - name: 'konfiguruj apache do nasluchiwania na wybranym porcie'
-#
-#    - name: 'zainicjalizuj virtualenv i zainstaluj zaleznosci' 
-#
-#    - name: 'utworz katalog na logi'
-#
+    - name: 'klonuj repozytorium aplikacji'
+      git:
+        repo: 'https://github.com/sirkubax/naszaaplikacja.git'
+        dest: "{{ katalog_glowny }}"
+
+    - name: 'zainicjalizuj virtualenv i zainstaluj zaleznosci' 
+      pip:
+          virtualenv: "{{ katalog_aplikacji }}/venv"
+          requirements: "{{ katalog_aplikacji }}/requirements.txt"
+      tags:
+          - wgraj_git
+
+    - name: 'wgraj definicje virtualhost naszaaplikacja.apache.conf jako template'
+      template:
+          src: naszaaplikacja.apache.conf
+          dest: /etc/apache2/sites-available/
+      notify:
+        - restart apache
+
+    - name: 'Wgraj sparametryzowany naszaaplikacja.wsgi (jako template)'
+      template:
+          src: naszaaplikacja.wsgi
+          dest: "{{ katalog_aplikacji }}"
+      notify:
+        - restart apache
+     
+    #odpowiednik tego na gorze 
+    - name: 'Wgraj sparametryzowany template'
+      template:
+          src: "{{ item.src }}"
+          dest: "{{ item.dest }}"
+      loop:
+          - src: naszaaplikacja.apache.conf
+            dest: /etc/apache2/sites-available/
+          - src: naszaaplikacja.wsgi
+            dest: "{{ katalog_aplikacji }}"
+      notify:
+        - restart apache
+
+
+    - name: 'wlacz virtualhost'
+      shell: a2ensite naszaaplikacja.apache.conf
+      args:
+          creates: /etc/apache2/sites-enabled/naszaaplikacja.apache.conf
+      notify:
+        - restart apache
+
+    - name: Apache port is 5081
+      lineinfile:
+        path: /etc/apache2/ports.conf 
+        regexp: '^Listen {{ port }}'
+        line: 'Listen {{ port }}'
+      notify:
+        - restart apache
+        - sprawdz apache
+
+    - name: 'utworz katalog na logi'
+      file:
+        dest: "{{ log_dir }}"
+        state: directory
+        owner: www-data
+        group: www-data
+
 #    - name: 'Wgraj sparametryzowany config.cfg (jako template)'
-#
-#    - name: 'restart apache'
+
+  handlers:
+    - name: 'restart apache'
+      service:
+        name: apache2
+        state: restarted
+      notify:
+        - sprawdz apache
+
+    - name: sprawdz apache
+      wait_for:
+        #port: "{{ port }}"
+        port: "5082"
+
+      #when:
+      #  - "{{ jakaszmienna.changed }} OR {{ jakaszmienna2.changed }}"

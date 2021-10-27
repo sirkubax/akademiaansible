@@ -1,0 +1,15 @@
+2021-10-26 07:05:22,400 p=29051 u=szkolenie12 n=ansible | [DEPRECATION WARNING]: [defaults]callback_whitelist option, normalizing names to new standard, use callbacks_enabled instead. This feature will be removed from ansible-core
+ in version 2.15. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+2021-10-26 07:05:22,437 p=29051 u=szkolenie12 n=ansible | PLAY [Ansible Ad-Hoc] *******************************************************************************************************************************************************
+2021-10-26 07:05:22,474 p=29051 u=szkolenie12 n=ansible | TASK [debug] ****************************************************************************************************************************************************************
+2021-10-26 07:05:22,474 p=29051 u=szkolenie12 n=ansible | Tuesday 26 October 2021  07:05:22 +0000 (0:00:00.038)       0:00:00.038 ******* 
+2021-10-26 07:05:22,512 p=29051 u=szkolenie12 n=ansible | ok: [18.134.10.192] => 
+  msg: zlinikomend costa
+2021-10-26 07:05:22,522 p=29051 u=szkolenie12 n=ansible | ok: [18.170.42.90] => 
+  msg: zlinikomend costa
+2021-10-26 07:05:22,528 p=29051 u=szkolenie12 n=ansible | PLAY RECAP ******************************************************************************************************************************************************************
+2021-10-26 07:05:22,529 p=29051 u=szkolenie12 n=ansible | 18.134.10.192              : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-26 07:05:22,529 p=29051 u=szkolenie12 n=ansible | 18.170.42.90               : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-26 07:05:22,529 p=29051 u=szkolenie12 n=ansible | Tuesday 26 October 2021  07:05:22 +0000 (0:00:00.055)       0:00:00.094 ******* 
+2021-10-26 07:05:22,529 p=29051 u=szkolenie12 n=ansible | =============================================================================== 
+2021-10-26 07:05:22,529 p=29051 u=szkolenie12 n=ansible | debug ---------------------------------------------------------------------------------------------------------------------------------------------------------------- 0.06s

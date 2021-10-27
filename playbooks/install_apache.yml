@@ -17,11 +17,23 @@
       pkg:
         - apache2
         - htop
+        - dstat
         #tu dopisz kolejny element listy - dstat
     become: True
 
   - name: Wait for instances to listen on port 80
     wait_for: state=started host=localhost port=80 timeout=15 delay=5
+
+  - name: Touch a file, using symbolic modes to set the permissions (equivalent to 0644)
+    ansible.builtin.file:
+      path: ~/stworzmnie_szkolenie11
+      state: touch
+      mode: u=rw,g=r,o=r
+
+  - name: Copy using inline content
+    ansible.builtin.copy:
+      content: 'OK'
+      dest: stworzmnie_copy_szkolenie11.txt 
 
   #- name: create file directory 
     #tu uzyj wlasciwy modul aby stworzyc katalog

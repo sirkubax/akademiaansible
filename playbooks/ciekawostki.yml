@@ -1,13 +1,18 @@
-- hosts: naszaaplikacja
+- hosts: apache
 
 
   tasks:
-  - name: napisz ze jest dobra pogoda
-    shell: echo 'dzisiaj pogoda jest ok'
+  - shell: echo 'pierwszalinia \n serwisu abc ' ; 
     register: twojazmienna
+    name: napisz ze jest dobra pogoda
+    #changed_when: '"restart" in twojazmienna.stdout' 
+    #failed_when: '"popsute" in twojazmienna.stdout' 
+    run_once: true
+
 
   - name: potwierdzam
-    shell: echo 'dzisiaj pogoda jest ok'
+    shell: echo 'byl restart przed chwila'
+    #when: '"restart" in twojazmienna.stdout'
 
 #  - name: wypisz date
 

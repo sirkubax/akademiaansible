@@ -10,6 +10,15 @@ vhosts_set:
       - uri_match: '/'
         dest: "http://{{ hostvars[groups['wordpress'][0]].ansible_default_ipv4.address }}/wordpress/"
         #dest: "http://{{ hostvars[groups['wordpress'][0]].ansible_default_ipv4.address }}/"
+  - servername: wp.kolejna.pl
+    serveralias: [wp.i.net, aa.pl]
+    staticpart: '#RequestHeader set Host wp.twojadomena.pl'
+    proxy_set:
+      - uri_match: '/'
+        dest: "http://{{ hostvars[groups['wordpress'][0]].ansible_default_ipv4.address }}/wordpress/"
+        #dest: "http://{{ hostvars[groups['wordpress'][0]].ansible_default_ipv4.address }}/"
+
+vhosts_set_balancer: []
 
 vhosts_set_balancer: []
 #  - servername: wp.twojadomena.pl

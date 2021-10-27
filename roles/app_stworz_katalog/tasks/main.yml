@@ -1,0 +1,4 @@
+- name: stworz katalog w roli
+  file: 
+    state: directory
+    path: "{{ sciezka_i_nazwa }}"
