@@ -1,4 +1,5 @@
 - hosts: windows
+  gather_facts: no
 
   tasks:
     - name: Ensure 7-Zip is installed via Chocolatey

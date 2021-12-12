@@ -12,7 +12,7 @@
   pre_tasks: []
 
   tasks:
-    - name: 'zainstaluj aplikacje apache2 i libapache2-mod-wsgi przekazując listę'
+    - name: 'zainstaluj aplikacje apache2 i libapache2-mod-wsgi-py3 przekazując listę'
       apt: 
         pkg:
           - apache2
