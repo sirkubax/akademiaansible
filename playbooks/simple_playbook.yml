@@ -1,4 +1,4 @@
-- hosts: all
+- hosts: apache
 
   tasks: 
   - set_fact:
