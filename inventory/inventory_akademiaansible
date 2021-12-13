@@ -19,8 +19,8 @@ localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env pyth
 
 #grupa apache
 [apache]
-18.134.97.246
-18.130.140.123
+ec2-18-170-114-102.eu-west-2.compute.amazonaws.com
+18.130.220.117
 
 #10.238.0.65
 #10.238.0.16
@@ -28,8 +28,7 @@ localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env pyth
 #18.134.146.248
 
 [backend]
-#10.238.0.234
-18.169.133.242
+18.133.139.95
 #18.169.242.253
 
 
