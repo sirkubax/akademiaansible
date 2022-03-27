@@ -15,11 +15,11 @@ mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/szkolenie_05_london.pem
 
 #grupa apache
 [apache]
-18.132.243.18
-18.130.233.230
+10.238.0.144
+18.168.201.48 #publiczny IP
 
 [backend]
-35.178.178.253
+10.238.0.178
 
 [prod:children]
 apache
@@ -31,7 +31,7 @@ backend
 [loadbalancer]
 3.9.114.245
 
-[mysql]
+[mysqlB]
 192.168.60.12
 10.218.0.117
 
