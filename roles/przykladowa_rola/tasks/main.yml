@@ -1,3 +1,6 @@
 ---
-- include: debug_time.yml
-- include: wypisz_hostname.yml
+#- include: debug_time.yml
+#- include: wypisz_hostname.yml
+#
+- debug:
+    msg: "{{ jakas_zmienna }}"

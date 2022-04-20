@@ -1,0 +1,27 @@
+- hosts: localhost
+
+  post_tasks:
+    - ping:
+
+  pre_tasks:
+    - ping:
+
+
+  roles:
+    - nasza_aplikacja
+    - sprawdzenie
+  handlers:
+    - name: jakies_connection_reset
+      shell: echo conn_reset
+
+
+
+
+- hosts: localhost
+  tasks:
+    - ping:
+
+    - include_role:
+        name: nasza_aplikacja
+
+    - ping:

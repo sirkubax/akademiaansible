@@ -1,0 +1,51 @@
+---
+
+- hosts: apache
+  name: play1
+
+  vars:
+    jakas_zmienna: 1234568
+
+  
+  pre_tasks:
+     - set_fact: 
+         jakas_zmienna: 1234
+
+
+  roles:
+    - role: przykladowa_rola
+      vars:
+        jakas_zmienna: kuba123457
+
+
+  tasks:
+    - name: wypisz jakas_zmienna
+      debug:
+        var: jakas_zmienna
+
+    - include_role: 
+        name: przykladowa_rola
+        tasks_from: wypisz_hostname.yml
+
+
+  #roles:
+  #  - role: przykladowa_rola
+  #    vars:
+  #      jakas_zmienna: kuba123457
+
+  post_tasks:
+    - debug:
+        msg: 'to jest koniec' 
+
+
+
+
+#  tasks:
+#    - name: "show time"
+#      shell: date
+#
+#    - inclue_role:
+#        name: przykladowa_rola
+
+  
+
