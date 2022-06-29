@@ -1,0 +1,66 @@
+- hosts: naszaaplikacja
+
+  become: true
+
+  #zmienne przydatne do parametryzacji wgrania, oraz szablonowania konfiguracji
+  vars:
+    katalog_glowny: /var/www/szkolenie.pl
+    katalog_aplikacji: "{{ katalog_glowny }}/aplikacja"
+    log_dir: "{{ katalog_glowny }}/logs"
+    port: 5081
+
+  pre_tasks: []
+
+  tasks:
+    - name: 'zainstaluj aplikacje apache2 i libapache2-mod-wsgi-py3 przekazując listę'
+      apt:
+        pkg:
+          - apache2
+          - libapache2-mod-wsgi-py3
+          - python-dev
+      become: true
+    
+      # apt-get install apache2 libapache2-mod-wsgi-py3 python-dev
+    
+    - name: 'Opcjonalnie zainstaluj aplikacje apache2 i pozostale pakiety przy pomocy with_items'
+      apt:
+        pkg: "{{ item }}"
+      loop:
+        - apache2
+        - libapache2-mod-wsgi-py3
+        - python-dev
+    
+      # apt-get install apache2
+      # apt-get install libapache2-mod-wsgi-py3
+      # apt-get install python-dev
+    
+    - name: wypisz na ekran
+      shell: echo "{{ item }}"
+      loop:
+       - pierwszy
+       - drugi
+       - trzeci
+
+
+
+#    - name: 'Opcjonalnie zainstaluj aplikacje apache2 i pozostale pakiety przy pomocy with_items'
+#
+#    ## wgrywamy do katalogu katalog_glowny
+#    # dest: "{{ katalog_glowny }}"
+#    - name: 'klonuj repozytorium aplikacji'
+#
+#    - name: 'wgraj definicje virtualhost naszaaplikacja.apache.conf jako template'
+#
+#    - name: 'Wgraj sparametryzowany naszaaplikacja.wsgi (jako template)'
+#
+#    - name: 'wlacz virtualhost'
+#
+#    - name: 'konfiguruj apache do nasluchiwania na wybranym porcie'
+#
+#    - name: 'zainicjalizuj virtualenv i zainstaluj zaleznosci' 
+#
+#    - name: 'utworz katalog na logi'
+#
+#    - name: 'Wgraj sparametryzowany config.cfg (jako template)'
+#
+#    - name: 'restart apache'
