@@ -1,8 +1,9 @@
 set -x
 
-ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=apache02 role=frontend"
-ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=apache01 role=frontend"
-ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=backend01 role=backend"
+ansible-playbook playbooks/create_aws_instance.yml -e "type=t3.nano hostname=apache02 role=frontend"
+ansible-playbook playbooks/create_aws_instance.yml -e "type=t3.nano hostname=apache01 role=frontend"
+ansible-playbook playbooks/create_aws_instance.yml -e "type=t3.nano hostname=backend01 role=backend"
+ansible-playbook playbooks/create_aws_instance.yml -e "type=t3.medium hostname=db01 role=db"
 
 #ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wodrpress01_szk16 role=wordpress"
 #ansible-playbook playbooks/create_aws_instance.yml -e "type=t2.nano hostname=wodrpress01_szk01 role=wordpress"
