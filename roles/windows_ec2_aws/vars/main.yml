@@ -2,7 +2,8 @@ region: eu-west-2
 key_name: szkolenie_05_london
 instance_type: t2.medium
 #image: ami-0f9853ca76d115e7b #Windows_Server-2019-English-Full-Base-2021.10.13
-image: ami-085e6d40d02506bac #Windows_Server-2019-English-Full-Base-2021.10.13
+#image: ami-085e6d40d02506bac #Windows_Server-2019-English-Full-Base-2021.10.13
+image: ami-0fd22a016e4e785f1 #Windows_Server-2019-English-Full-Base-2021.10.13
 vpc_subnet_id: subnet-0d096e74fce44c4d5
 tag_image: sample
 user_data: user_data/winrm.txt
