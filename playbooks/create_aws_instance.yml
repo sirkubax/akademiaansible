@@ -56,7 +56,7 @@
 
       - assert:
           that:
-            - "item.state == 'terminated'"
+            - "item.state.name == 'terminated'"
           msg: "Can't create host with same name"
         loop: "{{ with_same_hostname.instances |flatten(levels=1) }}"
         when:
@@ -111,19 +111,27 @@
         debug:
           msg: "{{ ec2 }}"
 
-      - name: Check state tag
-        debug: msg="state tag initial in one or more instances, SKIPPING"
-        when: "ec2.instances | length == 0 "
+      #- name: Check state tag
+      #  debug: msg="state tag initial in one or more instances, SKIPPING"
+      #  when: "ec2.instances | length == 0 "
+
+      - ec2_instance_info:
+          region: "{{ region | default('eu-west-2') }}"
+          filters:
+            instance-state-name: running
+            "tag:Name": "0-state"
+        register: ec2_0_state
 
       - name: Add instances to host group
         local_action: add_host hostname={{ item.private_ip_address }} groupname=temp_group id={{ item.instance_id }}
         when: item.public_ip_address is not defined
-        with_items: "{{ ec2.instances }}"
+        #with_items: "{{ ec2.instances }}"
+        with_items: "{{ ec2_0_state.instances }}"
 
       - name: Add instances to host group
         local_action: add_host hostname={{ item.public_ip_address }} groupname=temp_group id={{ item.instance_id }}
         when: item.public_ip_address is defined
-        with_items: "{{ ec2.instances }}"
+        with_items: "{{ ec2_0_state.instances }}"
 
       - name: List new instances
         local_action: debug var={{ item }}
