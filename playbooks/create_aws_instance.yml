@@ -75,19 +75,19 @@
   #          msg: "There is host in 0-state in {{ region | default('eu-west-2') }}"
 
       - name: Provision a set of instances
-        ec2:
+        amazon.aws.ec2_instance:
             region: "{{ region | default('eu-west-2') }}"
             key_name: "{{ key | default('kuba_aws') }}"
-            group: "{{ sg | default('default') }}"
+            security_group: "{{ sg | default('default') }}"
             instance_type: "{{ type | default('t3.nano') }}"
-            image: "{{ ami | default('ami-47a23a30') }}"
+            image_id: "{{ ami | default('ami-47a23a30') }}"
             vpc_subnet_id: "{{ subnet | default('subnet-97f033fe') }}"
             wait: yes
             count: 1
             #exact_count: 1
             #count_tag:
             #    state_tag: initial
-            instance_tags:
+            tags:
                 Name: 0-state
                 state_tag: initial
                 allow_change: True
@@ -95,29 +95,34 @@
                 role: "{{ role | default('empty') }}"
             volumes:
                 - device_name: /dev/sda1
-                  device_type: gp2
-                  volume_size: "{{ disk | default(11) }}"
-                  delete_on_termination: "{{ delete_disk | default(True) }}"
+                  ebs:
+                    volume_size: "{{ disk | default(11) }}"
+                    delete_on_termination: "{{ delete_disk | default(True) }}"
                 - device_name: /dev/sdb
-                  device_type: gp2
-                  volume_size: "{{ diskB | default(0) }}"
-                  delete_on_termination: "{{ delete_disk | default(True) }}"
-                  #iops: 50
-            assign_public_ip: "{{ assign_public_ip | default(False) }}"
+                  ebs:
+                    volume_size: "{{ diskB | default(1) }}"
+                    delete_on_termination: "{{ delete_disk | default(True) }}"
+            network:
+              #assign_public_ip: "{{ assign_public_ip | default(False) }}"
+              assign_public_ip: "{{ assign_public_ip | default(True) }}"
         register: ec2
+
+      - name: print ec2
+        debug:
+          msg: "{{ ec2 }}"
 
       - name: Check state tag
         debug: msg="state tag initial in one or more instances, SKIPPING"
-        when: "{{ ec2.instances | length }} == 0 "
+        when: "ec2.instances | length == 0 "
 
       - name: Add instances to host group
-        local_action: add_host hostname={{ item.private_ip }} groupname=temp_group id={{ item.id }}
-        when: item.public_ip is not defined
+        local_action: add_host hostname={{ item.private_ip_address }} groupname=temp_group id={{ item.instance_id }}
+        when: item.public_ip_address is not defined
         with_items: "{{ ec2.instances }}"
 
       - name: Add instances to host group
-        local_action: add_host hostname={{ item.public_ip }} groupname=temp_group id={{ item.id }}
-        when: item.public_ip is defined
+        local_action: add_host hostname={{ item.public_ip_address }} groupname=temp_group id={{ item.instance_id }}
+        when: item.public_ip_address is defined
         with_items: "{{ ec2.instances }}"
 
       - name: List new instances
