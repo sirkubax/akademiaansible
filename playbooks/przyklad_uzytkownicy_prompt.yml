@@ -1,0 +1,45 @@
+- hosts: naszaaplikacja
+
+  vars_prompt:
+    - name: username
+      prompt: podaj username
+      private: no
+
+  vars:
+      users:
+          - name: kuba
+            home: kubadir
+            permissions: sudo
+            serwery: wszystkie
+            state: present
+
+          - name: janek
+            home: kubadir
+            permissions: sudo
+            #serwery: wszystkie
+
+          - name: zbyszek
+            home: zbyszek
+            permissions: sudo
+            serwery: wszystkie
+
+  tasks:
+      - set_fact:
+          users_final: "{{ users | selectattr('name', 'in', username |split(',')) | list }}"
+        when: username |length > 0
+
+      - set_fact:
+          users_final: "{{ users }}"
+        when: username |length == 0
+
+      - name: wypisz username
+        debug:
+            msg: "{{ username }} {{ users_final }} {{ username |split(',') }}"
+
+      - name: dodaj uzytkownika
+        ansible.builtin.user:
+            name: "{{ item.name }}"
+            state: "{{ item.state | default('present') }}"
+        loop: "{{ users_final }}"
+
+        become: true
