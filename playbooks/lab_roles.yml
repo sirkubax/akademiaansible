@@ -17,4 +17,11 @@
         name: przykladowa_rola
 
   
+    - name: Remove duplicate lines
+      replace:
+        path: /etc/apache2/ports.conf
+        regexp: '^Listen 80$'
+        replace: ''
+      become: True
+      inore_errors: true
 
