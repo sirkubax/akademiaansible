@@ -1,0 +1,72 @@
+---
+- name: Launch EC2 instance
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    region: eu-west-3
+    instance_type: t2.micro
+    ami_id: ami-05b457b541faec0ca
+    key_name: szkolenie02
+    vpc_cidr: 10.0.0.0/16
+    subnet_cidr: 10.0.0.0/24
+    sg_name: my-sg
+
+  tasks:
+  - name: Create VPC
+    ec2_vpc_net:
+      state: present
+      cidr_block: "{{ vpc_cidr }}"
+      region: "{{ region }}"
+      name: my-vpc
+      resource_tags:
+        Name: my-vpc
+    register: vpc_result
+
+  - name: Create Subnet
+    ec2_vpc_subnet:
+      state: present
+      vpc_id: "{{ vpc_result.vpc.id }}"
+      cidr: "{{ subnet_cidr }}"
+      region: "{{ region }}"
+      tags:
+        Name: my-subnet
+    register: subnet_result
+
+
+  - name: Create Security Group
+    ec2_group:
+      name: "{{ sg_name }}"
+      description: Allow SSH
+      vpc_id: "{{ vpc_result.vpc.id }}"
+      region: "{{ region }}"
+      rules:
+        - proto: tcp
+          from_port: 22
+          to_port: 22
+          cidr_ip: 0.0.0.0/0
+    register: sg_result
+
+    # assign_public_ip, count, group_id, instance_tags
+  - name: Launch EC2 Instance
+    #ec2_instance:
+    amazon.aws.ec2_instance:
+      state: present
+      instance_type: "{{ instance_type }}"
+      image_id: "{{ ami_id }}"
+      key_name: "{{ key_name }}"
+      wait: true
+      security_group: "{{ sg_result.group_id }}"
+      vpc_subnet_id: "{{ subnet_result.subnet.id }}"
+      #assign_public_ip: yes
+      #count: 1
+      tags:
+        Name: my-instance-2
+      region: "{{ region }}"
+    register: ec2_result
+
+  - name: Show Public IP
+    debug:
+      var: ec2_result.instances[0].public_ip
+

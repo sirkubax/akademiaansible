@@ -111,6 +111,23 @@
         debug:
           msg: "{{ ec2 }}"
 
+      - name: status pending, wait
+        wait_for:
+          timeout: 15
+        when:
+          - ec2.state.name is defined and ec2.state.name == 'pending'
+
+            #        "state": {
+            #            "code": 0,
+            #             "name": "pending"
+            #          },
+
+
+      #- name: status pending, wait anyway
+      #  wait_for:
+      #    timeout: 15
+
+
       #- name: Check state tag
       #  debug: msg="state tag initial in one or more instances, SKIPPING"
       #  when: "ec2.instances | length == 0 "
