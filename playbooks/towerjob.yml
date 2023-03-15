@@ -8,8 +8,8 @@
     #awx_api_url: "https://your-awx-instance.com/api/v2/"
     #awx_api_token: "your-awx-api-token"
     #awx_api_url: "http://18.132.71.223:30080/api/v2/"
-    awx_api_url: "http://18.132.71.223:30080/"
-    awx_api_token: "rVL5feaTFv28hX518kRW50ob0eyvXp"
+    awx_api_url: "http://35.181.6.117:30080/"
+    awx_api_token: "yvggON53bh6kpT9Zji4AcPLnSmYZ5s"
 
   tasks:
     - name: Create Credential
@@ -29,11 +29,11 @@
 
     - name: Create Project
       tower_project:
-        name: "My AWX Project"
+        name: "szkolenie09 - z - playbook"
         description: "This is my AWX project"
         scm_type: "git"
-        scm_url: "https://github.com/sirkubax/akademiaansible.git"
-        scm_branch: "master"
+        scm_url: "https://github.com/sirkubax/for_awx.git"
+        scm_branch: "main"
         #scm_credential: "Demo Credential"
         wait: true
         state: "present"
@@ -44,26 +44,28 @@
         validate_certs: false
         controller_host: "{{ awx_api_url }}"
         controller_oauthtoken: "{{ awx_api_token }}"
+        organization: Default
       register: project
 
     - name: Create Job Template
       tower_job_template:
-        name: "My AWX Job Template"
+        name: "uruchom na maszynach awx jakis play"
         description: "This is my AWX Job Template"
         job_type: "run"
-        inventory: "Demo Inventory"
-        project: "My AWX Project"
-        playbook: "playbooks/simple_playbook.yml"
-        credential: "My Credential"
+        inventory: "z_aws"
+        project: "szkolenie09 - z - playbook"
+        playbook: "playbooks/simple_playbook_szkolenie09.yml"
+        credential: "klusz_ssh"
         #extra_vars: |
         #  my_var: "my_value"
         allow_simultaneous: true
-        limit: "my-host"
+        #limit: "my-host"
         #extra_data:
         #  webhook_credential: "My Webhook Credential"
         controller_host: "{{ awx_api_url }}"
         #controller_host: "http://18.132.71.223"
         controller_oauthtoken: "{{ awx_api_token }}"
+        organization: Default
       delegate_to: localhost
 
 
