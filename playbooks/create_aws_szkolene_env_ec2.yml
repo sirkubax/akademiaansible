@@ -1,0 +1,261 @@
+---
+- hosts: localhost
+
+  vars:
+      vpc_name: siec_szkolenie09
+      vpc_cidr: 172.16.0.0/16
+      region: eu-west-3
+      subnet_cidr: 172.16.0.0/24
+      subnet_name: szkolenie09_subnet
+      route_name: wyjscie_swiat_routetable_szkoilenie09
+      igw_name: igw_szkolenie09_2
+      sg:
+        name: sg_szkolenie09
+        description: DMZ Security Group szkolenie09
+        rules:
+          - proto: tcp
+            ports:
+            - 80
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            ports:
+            - 22
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            ports:
+            - 6443 
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            ports:
+            - 30080 
+            cidr_ip: 0.0.0.0/0
+      keypair_name: klucz_szkolenie09
+      ec2_key_directory: ~/.ssh/
+      istance_name: szkole09_vm
+      ec2_type: t3.medium
+      public_ip: True
+      ami: ami-05b457b541faec0ca #ubuntu2204
+      instance_state: absent
+      stan_zasobow: present
+
+
+  tasks:
+
+    - name: create VPC
+      ec2_vpc_net:
+        name: "{{ vpc_name }}"
+        cidr_block: "{{ vpc_cidr }}"
+        region: "{{ region }}"
+        state: "{{ stan_zasobow }}"
+        #aws_access_key: "{{ aws_access_key }}"
+        #aws_secret_key: "{{ aws_secret_key }}"
+      register: vpc
+
+    - name: Set VPC ID in variable
+      set_fact:
+        vpc_id: "{{ vpc.vpc.id }}"
+
+
+    - name: associate subnet to the VPC
+      ec2_vpc_subnet:
+        state: "{{ stan_zasobow }}"
+        vpc_id: "{{ vpc_id }}"
+        region: "{{ region }}"
+        cidr: "{{ subnet_cidr }}"
+        map_public: yes
+        resource_tags:
+          Name: "{{ subnet_name }}"
+      register: subnet
+
+    - name: create IGW
+      ec2_vpc_igw:
+        vpc_id: "{{ vpc_id }}"
+        region: "{{ region }}"
+        state: "{{ stan_zasobow }}"
+        tags:
+          Name: "{{ igw_name }}"
+      register: igw
+   
+   
+    - name: Route IGW
+      ec2_vpc_route_table:
+        vpc_id: "{{ vpc_id }}"
+        region: "{{ region }}"
+        subnets:
+          - "{{ subnet.subnet.id }}"
+        routes:
+          - dest: 0.0.0.0/0
+            gateway_id: "{{ igw.gateway_id  }}"
+        tags:
+          Name: "{{ route_name }}"
+        state: "{{ stan_zasobow }}"
+
+
+    - name: Create Security Group
+      ec2_group:
+        name: "{{ sg.name }}"
+        description: "{{ sg.description }}"
+        vpc_id: "{{ vpc_id }}"
+        region: "{{ region }}"
+        rules: "{{ sg.rules }}"
+            #- proto: tcp
+            #  ports:
+            #  - 80
+            #  cidr_ip: 0.0.0.0/0
+            #- proto: tcp
+            #  ports:
+            #  - 22
+            #  cidr_ip: 0.0.0.0/0
+        state: "{{ stan_zasobow }}"
+      register: security_group
+    
+    - name: create a new ec2 key pair, returns generated private key
+      ec2_key:
+        name: "{{ keypair_name }}"
+        region: "{{ region }}"
+        state: "{{ stan_zasobow }}"
+      register: keypair
+      tags:
+       - ec2_key
+    
+    - debug:
+         var: keypair
+      tags:
+       - ec2_key
+
+    - name: Copy EC2 Key Pair private key locally
+      copy: 
+        content: "{{ keypair.key.private_key }}" 
+        dest: "{{ ec2_key_directory }}/{{ keypair_name}}_key.ppk"
+        mode: 0400
+        state: "{{ stan_zasobow }}"
+      when: keypair.changed == true
+      tags:
+       - ec2_key
+
+    - ec2_instance_info:
+        region: "{{ region }}"
+        filters:
+          "tag:Name": "{{ istance_name }}"
+          "tag:role": "awx"
+          #"tag:stan_maszyny": "0_state"
+          "tag:wlasciciel": "szkolenie09"
+          "tag:srodowisko": "dev"
+
+      register: with_same_hostname
+
+    - debug:
+        msg: "{{ with_same_hostname.instances }}"
+
+
+    - name: Create EC2 Instance
+      ec2_instance:
+        image_id: "{{ ami }}"
+        wait: yes
+        instance_type: "{{ ec2_type }}"
+        region: "{{ region }}"
+        security_groups:
+          - "{{ security_group.group_id }}"
+        vpc_subnet_id: "{{ subnet.subnet.id }}"
+        key_name: "{{ keypair.key.name  }}"
+        #count_tag: "{{ ec2_tag }}"
+        #count: 1
+        network:
+          assign_public_ip: "{{ public_ip }}"
+        tags:
+            Name: "{{ istance_name }}"
+            role: awx
+            stan_maszyny: 0_state
+            wlasciciel: szkolenie09
+            srodowisko: dev
+        state: "{{ instance_state }}"
+        filters:
+          "tag:Name": "{{ istance_name }}"
+          "tag:role": "awx"
+          #"tag:stan_maszyny": "0_state"
+          "tag:wlasciciel": "szkolenie09"
+          "tag:srodowisko": "dev"
+          instance-state-name: running
+      register: ec2
+
+    - name: stworz tymczasowa grupe
+      add_host:
+        name: "{{ item.public_ip_address }}"
+        groups: nasze_vm 
+      loop: "{{ ec2.instances }}"
+      when: "{{ item.state }} == 'running'"
+
+    - wait_for:
+        port: 22
+        host: "{{ item.public_ip_address }}"
+      loop: "{{ ec2.instances }}"
+
+
+- hosts: nasze_vm
+
+  gather_facts: true
+  become: true
+
+  vars:
+    keypair_name: klucz_szkolenie09
+    ec2_key_directory: ~/.ssh/
+    ansible_ssh_private_key_file: "{{ ec2_key_directory }}/{{ keypair_name}}_key.ppk"
+    ansible_ssh_user: ubuntu
+    region: eu-west-3
+  
+  pre_tasks:
+    - ping:
+
+    - amazon.aws.ec2_metadata_facts:
+
+    - debug:
+        msg: "{{ hostvars[inventory_hostname] }}"
+
+  roles:
+      - role: sys_manage_keys
+      - sys_debug
+      - sys_init_common
+
+
+- hosts: nasze_vm
+  connection: local
+
+  vars:
+    region: eu-west-3
+
+  post_tasks:
+    - ec2_tag:
+        region: "{{ region }}"
+        resource: "{{ ansible_ec2_instance_id }}"
+        tags:
+          #"tag:Name": "{{ istance_name }}"
+          #"tag:role": "awx"
+          "stan_maszyny": "gotowe"
+          #"tag:wlasciciel": "szkolenie09"
+          #"tag:srodowisko": "dev"
+      delegate_to: localhost
+
+
+- hosts: nasze_vm
+  name: zainstaluj k8s (k3s)
+
+  gather_facts: true
+  become: true
+
+  vars:
+    keypair_name: klucz_szkolenie09
+    ec2_key_directory: ~/.ssh/
+    ansible_ssh_private_key_file: "{{ ec2_key_directory }}/{{ keypair_name}}_key.ppk"
+    ansible_ssh_user: ubuntu
+
+  roles:
+    - role: xanmanning.k3s
+      tags: k3s_nodes
+      vars:
+        k3s_become_for_all: true
+        k3s_become: true
+        k3s_flags: "--node-external-ip {{ inventory_hostname }}"
+         
+    #https://galaxy.ansible.com/pandemonium1986/k8s_toolbox
+    - role: k9s
+      tags: k9s

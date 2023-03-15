@@ -1,0 +1,5 @@
+---
+- hosts: tag_role_awx:&tag_wlasciciel_szkolenie09:&tag_srodowisko_dev
+
+  tasks:
+    - ping:
