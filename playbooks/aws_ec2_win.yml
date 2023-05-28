@@ -1,7 +1,0 @@
-- name: Deploy ec2 Instance
-  hosts: localhost
-  connection: local
-  gather_facts: false
-  roles:
-    - windows_ec2_aws
-

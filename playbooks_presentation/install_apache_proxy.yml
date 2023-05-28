@@ -1,7 +1,0 @@
----
-- hosts: wordpress
-
-  roles:
-  - { role: app_apache_template_proxy, become: True }
-
-

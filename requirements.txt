@@ -1,4 +1,0 @@
-ansible==4.2.0
-boto
-boto3
-yamllint

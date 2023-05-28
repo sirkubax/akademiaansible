@@ -1,3 +1,0 @@
-ansible -m template localhost -a "src=home.tmpl_j2 dest=/tmp/wynik" --diff -e k8s_namespace=przyklad
-ansible -m template localhost -a "src=prosty_szablon.tmpl dest=/tmp/wynik" --diff -e kawalek_szablonu=przyklad
-
