@@ -1,0 +1,23 @@
+- hosts: localhost
+
+  tasks:
+
+    - name: zainstaluj podstawowe aplikacje
+      apt:
+        name: "{{ item.name }}"
+        state: "{{ item.state |default('present') }}"
+      loop:
+        - name: curl
+          state: latest
+        - name: vim
+        - name: net-tools
+        - name: apache2
+          state: absent
+        - name: iproute2
+          state: latest
+
+    - name: dopisz udawane hosty do /etc/hosts
+      shell: echo "127.0.0.3 bastion produkcja01" >> /etc/hosts
+
+    - name: dopisz udawane hosty do /etc/hosts
+      shell: echo "127.0.0.4 produkcja02" >> /etc/hosts
