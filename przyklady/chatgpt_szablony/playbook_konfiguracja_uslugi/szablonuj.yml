@@ -1,0 +1,16 @@
+---
+- name: konfiguracja
+  hosts: localhost
+  gather_facts: no
+  vars:
+    srodowisko: dev
+    db:
+      address: nasza_baza.com.pl
+      user: admin
+      pass: haslo1234
+
+  tasks:
+    - name: wygeneruj konfiguracje
+      template:
+        src: konfiguracja.txt
+        dest: /etc/konfiguracja.txt

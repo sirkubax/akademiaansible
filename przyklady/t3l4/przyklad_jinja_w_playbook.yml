@@ -1,0 +1,11 @@
+---
+- hosts: all
+
+  vars:
+    zmiennaA: 1234
+
+  tasks:
+    - name: wypisz na ekran
+      debug:
+        msg: "{{ zmiennaA }}"
+

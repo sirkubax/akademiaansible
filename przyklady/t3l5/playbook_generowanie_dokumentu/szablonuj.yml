@@ -1,0 +1,15 @@
+---
+- name: generuj dokument
+  hosts: localhost
+  gather_facts: no
+  vars:
+    cat_image_url: https://cdn.pixabay.com/photo/2014/11/30/14/11/cat-551554__340.jpg
+    zmienne:
+      jakas_zmienna: 'jakas_wartosc_1234'
+      kolejny_parametr: 192.168.1.1
+
+  tasks:
+    - name: wygeneruj dokument
+      template:
+        src: dokument.txt
+        dest: /tmp/kompletny_dokument.txt

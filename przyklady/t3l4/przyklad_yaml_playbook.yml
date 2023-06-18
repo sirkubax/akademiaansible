@@ -1,0 +1,57 @@
+---
+- hosts: all
+
+  vars:
+    zmiennaA: 1234
+
+  tasks:
+    - ping:
+      ignore_errors: True
+
+    - ping: 
+      name: to jest opcjonalna nazwa 
+      register: wyjscie_do_zmiennej
+      faled_when: False
+      changed_when: False
+
+    - debug: var=ansible_facts
+
+    - debug: 
+        var: ansible_facts
+
+  roles:
+    - role: przykladowa_rola
+
+  handlers:
+    - name: restart apache
+      ping:
+
+  #to jest komentarz
+
+  #a ponizej dalsze parametry pierwszego Play w tym playbooku
+  gather_facts: smart
+  become: True
+  
+  pre_tasks: []
+  post_tasks: []
+
+  # zauwaz ze kolejnosc kluczy w slowniku nie ma znaczenia - przykladowo pre_tasks moze byc na samym koncu, albo w dowolnym innym miejscu tego obiektu (slownika) - bedzie dzialac prawidlowo
+
+######
+# a teraz drugi play na liscie w tym Playbook, ten jest zdefiniowany slownikiem zapisanym w formacie jednej linii przy uzyciu {}
+# ten playbook w sposob jawny deklaruje koniecznosc pobrania faktow z maszyn
+- { hosts: all, gather_facts: True }
+
+######
+# Trzeci play, >prawie< nic nie robi, wgrywa zmiennie hostow do pamieci, , w logu wykonania pojawi sie jedynie jego tytul
+# 
+- hosts: apache
+  name: Trzeci playbook - jest pusty - tylko wgrywamy zmienne do pamieci
+
+######
+# wywoluje role
+- hosts: all
+  name: Czwarty playbook
+
+  roles:
+    - sys_debug

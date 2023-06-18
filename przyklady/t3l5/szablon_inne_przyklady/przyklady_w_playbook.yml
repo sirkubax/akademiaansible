@@ -1,0 +1,19 @@
+---
+- name: przyklad szablonow w playbook
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: wypisz (skopiuj) do pliku
+      copy:
+        content: |
+          OK
+          kolejna linia - przyklad
+          zakonczono przetwarzanie
+        dest: /tmp/flaga_instalacji
+
+
+    - name: echo z szablonu jinja2 - ciekawostka w szablonie uzywamy filtra | max
+      shell: "echo {{ [1, 2, 5] | max }}" 
+      
+     
+

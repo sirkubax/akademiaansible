@@ -1,0 +1,17 @@
+---
+- name: Create an HTML site with a cat image
+  hosts: localhost
+  gather_facts: no
+  vars:
+    cat_image_url: https://cdn.pixabay.com/photo/2014/11/30/14/11/cat-551554__340.jpg
+
+  tasks:
+    - name: Create the HTML file
+      template:
+        src: index.html.j2
+        dest: /var/www/html/index.html
+
+    - name: Start the web server
+      shell: python3 -m http.server 8080 -d /var/www/html/ >> /tmp/log 2>&1 &
+      become: yes
+

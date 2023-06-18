@@ -1,0 +1,24 @@
+---
+- hosts: webservers
+
+  tasks:
+    - name: install apache2
+      apt:
+        name: apache2
+        state: present
+
+    - name: Configure Apache
+      template:
+        src: template.j2
+        dest: /etc/apache2/sites-available/000-default.conf
+      vars:
+        server_name: mysite.example.com
+    
+    - name: Enable site
+      command: a2ensite my_site.conf
+    
+    - name: Reload Apache2 to apply changes
+      service:
+        name: apache2
+        state: reloaded
+    

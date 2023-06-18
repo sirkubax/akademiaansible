@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  vars:
+    package_name: nginx
+  tasks:
+    - name: Ensure {{ package_name }} is installed.
+      apt:
+        name: "{{ package_name }}"
+        state: present

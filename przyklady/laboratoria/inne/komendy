@@ -1,0 +1,88 @@
+#na hoscie
+sudo mkdir ~/katalog/
+sudo chmod 777 ~/katalog/
+
+sudo docker  run  -d  --name nasz_kontener -p 8080:8080 -v ~/katalog:/katalog ubuntu:22.04  sh -c 'sleep 300d'
+docker ps
+docker exec -ti nasz_kontener bash
+
+#stop i kiedys start kontenera
+#docker stop nasz_kontener
+#docker start nasz_kontener
+
+#czyszczenie
+#docker stop nasz_kontener
+#docker rm nasz_kontener
+
+apt-get update
+apt-get install python3
+pip install ansible
+ansible --version
+
+
+cd katalog_w_obrazie
+ansible-playbook playbooks/jakis_prosty_playbook.yml
+
+
+#playbook na usera
+ansible-playbook playbooks/dodaj_uzytkownika.yaml
+
+
+#pseudoinventory
+echo 'localhost' >  inventory.ini
+
+#dodanie tworzenia katalogu i cos jeszcze do playbook usera (zmienne, modul file)
+ansible-playbook playbooks/dodaj_uzytkownika.yaml
+
+#instalacja flask i odpalenie aplikacji?
+ansible-playbook playbooks/install_flask.yml
+
+
+#ROLE
+
+ansible-galaxy install geerlingguy.apache
+
+ansible-playbook playbooks/apache.yml  -v
+ps aux
+apt-get install curl    #a to moze z playbooka?
+curl -kv 127.0.0.1:80  
+
+
+
+############# koniec
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#opcja pod instalacje pip
+apt-get update
+apt-get install python3 virtualenv
+#pip install ansible
+source source_me.sh
+
+#
+# w docker - dla flask !
+apt-get update
+apt-get install python3 virtualenv
+cd aplikacja
+source source_me.sh
+
+
+
+
+#rownowazne komendy
+apt-get install ansible 
+pip install ansible
+snap install ansible
+brew install ansible
+#mozna tez np: git clone https://github.com/ansible/ansible.git; cd ansible; pip3 install .

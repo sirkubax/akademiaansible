@@ -1,0 +1,33 @@
+---
+# https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html
+
+- hosts: localhost
+
+  vars:
+    include_newlines: |
+      exactly as you see
+      will appear these three
+      lines of poetry
+
+    fold_newlines: >
+      this is really a
+      single line of text
+      despite appearances
+
+  tasks:
+    - debug:
+        var: include_newlines
+      name: wypisz jako zmienna - blok tekstu, zostana znaki \n 
+
+    - debug:
+        msg: "{{ include_newlines }}"
+      name: wypisz jako string, zostana znaki \n 
+
+    - debug:
+        msg: "{{ include_newlines | split('\n') }}"
+      name: wypisz jako wiele lini
+
+
+    - name: dla kontrastu, zmienna w ktorej zignorowano podzial na linie
+      debug:
+        var: fold_newlines

@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  
+  tasks:
+  - name: Generate Nginx config file
+    template:
+      src: my_site.conf
+      dest: /etc/nginx/conf.d/my_site.conf
+    vars:
+      server_name: mysite.example.com
+      upstream_server: 127.0.0.1:8080
+  
+  #ansible -m template -a '' -e 'server_name= upstream_server='  localhost
