@@ -11,7 +11,9 @@ docker ps
 #docker exec -ti nasz_kontener bash
 
 
-# mozliwe problemy
+########
+# Mozliwe problemy
+########
 
 #docker: Error response from daemon: Conflict. The container name "/nasz_kontener" is already in use by container "2bba8ad52909d2781d318f1b5a97586c75b5fa2ca14374294eb6484e7e788be0". You have to remove (or rename) that container to be able to reuse that name.
 
@@ -19,7 +21,9 @@ docker ps
 # zaleznie od naszej potrzeby, mozemy albo podlaczyc sie do tego istniejacego obrazu, albo go usunac i ponowic tworzenie nowej instancji 
 
 
+########
 # Przydatne komendy
+########
 
 # stop i kiedys start kontenera
 #docker stop nasz_kontener

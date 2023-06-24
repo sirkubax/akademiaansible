@@ -14,3 +14,7 @@
 apt-get install -y python3-pip
 pip3 install ansible
 ansible --version
+
+
+# jesli nie montowalismy katalogu z hosta, to dla spojnosci z instrukcja utworzymy ten folder
+mkdir /katalog || true
