@@ -5,4 +5,4 @@
   become: yes
 
   roles:
-    - role: user_and_group_twoja
+    - role: user_and_group
