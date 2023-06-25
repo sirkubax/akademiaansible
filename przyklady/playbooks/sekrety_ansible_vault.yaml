@@ -1,0 +1,23 @@
+- hosts: localhost
+
+  vars:
+    srodowisko: dev
+
+  vars_files:
+    - vars/zmienne/jakies_zmienne.yml
+    - "vars/zmienne/{{ srodowisko }}.yml" 
+    - "vars/zmienne/{{ srodowisko }}_vault.yml" 
+
+  tasks:
+
+    - name: sprawdz srodowisko wykonujac modul ping
+      ping:
+
+    - name: wypisz haslo do bazy
+      debug:
+        msg: "{{ haslo_do_bazy }}"
+
+    - name: doladuj zmienne
+      include_vars:
+        file: zmienn_kolejne.yml
+
