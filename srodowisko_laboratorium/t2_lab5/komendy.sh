@@ -1,3 +1,3 @@
 #!/bin/bash
 
-ansible-playbook playbooks/dodaj_uzytkownika.yaml
+ansible-playbook playbooks/013_dodaj_uzytkownika.yaml -v
