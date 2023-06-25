@@ -1,2 +1,9 @@
 - hosts: bastion
 
+
+
+# Odpowiada to komendom
+#groupadd dev
+#useradd kuba -g dev 
+#passwd kuba
+
