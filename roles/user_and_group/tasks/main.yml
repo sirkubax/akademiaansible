@@ -1,0 +1,14 @@
+---
+- name: Ensure group dev exists
+  ansible.builtin.group:
+    name: dev
+    state: present
+
+- name: Ensure user newuser exists
+  ansible.builtin.user:
+    name: newuser
+    password: "{{ 'your_password' | password_hash('sha512') }}" # replace 'your_password' with the user's password
+    state: present
+    groups: dev  # This will add the user to the 'dev' group
+    append: yes  # Ensures the user is added to the group without removing existing group memberships
+
