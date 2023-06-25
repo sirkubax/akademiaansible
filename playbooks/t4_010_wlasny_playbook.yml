@@ -1,0 +1,10 @@
+---
+## Propozycja
+#  Napisz playbook ktory wykona kilka prostych zadan systemowych, ustawi srodowisko
+#  
+# utworz katalog ~/bin  i ~/logs z uprawnieniami 700 
+# w pliku ~/.bashrc dodaj do sciezki systemowej $PATH sciezke do katalogu ~/bin
+# w pliku ~/.bashrc dodaj alias na komende ls, propozycja lh='ls -lah'
+# utworz nowego uzytkownika admin_tech, utworz u niego katalog ~/bin z uprawnieniami 700
+# wyswietl procesy systemowe, zapisz do pliku w katalogu ~/logs 
+# zrestartuj apache2

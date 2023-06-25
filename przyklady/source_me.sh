@@ -21,10 +21,8 @@ done
 if [ -z "$VIRTUAL_ENV" ]; then
   if ! [ -d $ANS_ROOT_DIR/$VENV_NAME ]; then
     echo '-- No virtualenv detected; creating'
-    pip install virtualenv
     virtualenv $ANS_ROOT_DIR/$VENV_NAME --python=python3 || (echo '!!! virtualenv creation failed' && return)
     mkdir ~/.ansible
-    mkdir ~/.ssh
     touch ~/.ssh/vault_pass_11.txt
     __venv_created=true
   fi
