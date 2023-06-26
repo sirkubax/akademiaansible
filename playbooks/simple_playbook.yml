@@ -1,5 +1,8 @@
 - hosts: apache
 
+  vars:
+    moja_zmienna: 'to jest string'
+
   tasks: 
   - set_fact:
       aaa: 1235 

@@ -7,3 +7,5 @@ ansible_connection: ssh
 #ansible_ssh_user: vagrant
 ansible_ssh_private_key_file: "~/.ssh/id_rsa_szkolenie"
 ansible_ssh_user: ubuntu
+
+ciekawa_zmienna: 'z group_vars all'
