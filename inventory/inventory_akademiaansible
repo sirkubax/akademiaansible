@@ -19,8 +19,8 @@ mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/szkolenie_05_london.pem 
 
 #grupa apache
 [apache]
-18-134-5-48.eu-west-2.compute.amazonaws.com
-18.170.67.92
+18.133.120.94
+ec2-18-169-240-76.eu-west-2.compute.amazonaws.com
 
 [db]
 10.238.0.106
