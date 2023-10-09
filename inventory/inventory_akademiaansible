@@ -1,5 +1,5 @@
 [all:vars]
-system_env=szkolenie
+system_env=akademia
 location=london_akademiaansible
 
 #przykład grupy mylocalhost
@@ -19,15 +19,15 @@ mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/szkolenie_05_london.pem 
 
 #grupa apache
 [apache]
-ec2-13-40-160-37.eu-west-2.compute.amazonaws.com
-10.238.0.148
-18.170.43.215
+10.238.0.151
+ec2-35-178-182-111.eu-west-2.compute.amazonaws.com
+35.178.182.111
 
 [db]
-10.238.0.145
+10.238.0.69
 
 [backend]
-10.238.0.86
+10.238.0.70
 
 [prod:children]
 apache
