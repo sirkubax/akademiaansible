@@ -1,4 +1,5 @@
-ansible==4.2.0
+#ansible==4.2.0
+ansible=6.7.0
 boto
 boto3
 yamllint

@@ -11,4 +11,4 @@
     #instance_role: "{{ instance_role }}"
     tags:
       image: "{{ tag_image }}"
-    #name: 0-state-win
+    name: 0-state-win

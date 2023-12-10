@@ -8,8 +8,8 @@
     #awx_api_url: "https://your-awx-instance.com/api/v2/"
     #awx_api_token: "your-awx-api-token"
     #awx_api_url: "http://18.132.71.223:30080/api/v2/"
-    awx_api_url: "http://35.181.6.117:30080/"
-    awx_api_token: "yvggON53bh6kpT9Zji4AcPLnSmYZ5s"
+    awx_api_url: "http://13.81.248.175:30080/"
+    awx_api_token: "VMQhXcDigHEkzjfzEkMfuaCX30ls2U"
 
   tasks:
     - name: Create Credential
@@ -29,7 +29,7 @@
 
     - name: Create Project
       tower_project:
-        name: "szkolenie09 - z - playbook"
+        name: "szkolenie_playbook"
         description: "This is my AWX project"
         scm_type: "git"
         scm_url: "https://github.com/sirkubax/for_awx.git"
@@ -47,15 +47,46 @@
         organization: Default
       register: project
 
+    - name: Dodaj inwentarz
+      awx.awx.inventory:
+        name: z_aws
+        organization: Default
+        state: present
+        controller_host: "{{ awx_api_url }}"
+        controller_oauthtoken: "{{ awx_api_token }}"
+        organization: Default
+
+    - name: Dodaj inwentarz
+      awx.awx.inventory_source:
+        name: z_aws_source
+        organization: Default
+        inventory: z_aws
+        state: present
+        source: scm
+        source_project: szkolenie_playbook  # Zastąp nazwą projektu w AWX, który ma zawierać repozytorium
+        source_path: inventory/jm           # Ścieżka do inwentarza w repozytorium
+        #source_scm_url: https://github.com/sirkubax/for_awx.git
+        #source_scm_branch: main
+        validate_certs: false
+        controller_host: "{{ awx_api_url }}"
+        controller_oauthtoken: "{{ awx_api_token }}"
+      register: inventory_result
+    
+    - name: Wyświetl wynik
+      debug:
+        var: inventory_result
+    
+
     - name: Create Job Template
       tower_job_template:
         name: "uruchom na maszynach awx jakis play"
         description: "This is my AWX Job Template"
         job_type: "run"
         inventory: "z_aws"
-        project: "szkolenie09 - z - playbook"
+        project: "szkolenie_playbook"
         playbook: "playbooks/simple_playbook_szkolenie09.yml"
-        credential: "klusz_ssh"
+        #credential: "klusz_ssh"
+        credential: rsa_szkolenie
         #extra_vars: |
         #  my_var: "my_value"
         allow_simultaneous: true

@@ -12,7 +12,6 @@
     - vim
     - screen  
     - python3-flake8
-    - ctags
     - htop
     - sysstat
     - git
@@ -28,6 +27,8 @@
     - libffi-dev #ansible
     - unzip
     - mcedit
+    - universal-ctags
+    #- ctags
     #    - iproute2
     #    - pv
     #    - iotop

@@ -8,7 +8,6 @@ localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env pyth
 
 #grupa mgmt
 [mgmt]
-#mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/id_rsa_szkolenie
 mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/szkolenie_05_london.pem ciekawa_zmienna=ddddddd jeszcze_inna=1234
 #18.132.121.80 
 #35.178.115.119
@@ -20,8 +19,8 @@ mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/szkolenie_05_london.pem 
 #grupa apache
 [apache]
 18.134.163.199
-ec2-35-177-112-203.eu-west-2.compute.amazonaws.com
-10.238.0.79
+ec2-3-10-174-71.eu-west-2.compute.amazonaws.com
+10.238.0.230
 
 [db]
 10.238.0.189
@@ -33,6 +32,9 @@ ec2-35-177-112-203.eu-west-2.compute.amazonaws.com
 apache
 backend
 db
+
+
+
 
 
 #grupa loadbalancer
