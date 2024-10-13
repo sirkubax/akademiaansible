@@ -1,20 +1,24 @@
 - debug: msg="{{ generic_vpc }}"
 
-- name: Provision instance(s) A
-  ec2:
+- name: Provision a set of instances
+  amazon.aws.ec2_instance:
+      #security_group: "{{ sg | default('default') }}"
+      #wait: true
+      #state: running
+      #count: 1
       region: "{{ region | default('eu-west-2') }}"
       key_name: "{{ key | default('szkolenie_05_london') }}"
-      group: "{{ sg_group | default(generic_vpc.security_groups.name) }}" 
+      security_group: "{{ sg_group | default(generic_vpc.security_groups.name) }}" 
       instance_type: "{{ type | default('t3.nano') }}"
-      image: "{{ ami | default('ami-f1d7c395') }}"
+      image_id: "{{ ami | default('ami-f1d7c395') }}"
       vpc_subnet_id: "{{ subnet | default(subnet.subnet.id) }}"
       wait: yes
       exact_count: "{{ count | default(1) }}"
       source_dest_check: "{{ source_dest_check | default(True) }}"
-      count_tag:
-          role: "{{ host_role | default('mgmtszkolenie') }}"
-          instance_tag: "{{ generic_vpc.ec2_eip.instance_A.tag }}"
-      instance_tags:
+      #filters:
+      #    role: "{{ host_role | default('mgmtszkolenie') }}"
+      #    instance_tag: "{{ generic_vpc.ec2_eip.instance_A.tag }}"
+      tags:
           Name: "{{ generic_vpc.ec2_eip.instance_A.name }}" 
           instance_tag: "{{ generic_vpc.ec2_eip.instance_A.tag }}"
           instance_group: "{{ generic_vpc.instance_group }}"
@@ -24,16 +28,54 @@
           role: "{{ host_role | default('mgmtszkolenie') }}"
       volumes:
           - device_name: /dev/sda1
-            device_type: gp2
-            volume_size: "{{ disk | default(55) }}"
-            delete_on_termination: "{{ delete_disk | default(True) }}"
+            ebs:
+              volume_size: "{{ disk | default(55) }}"
+              delete_on_termination: "{{ delete_disk | default(True) }}"
           - device_name: /dev/sdb
-            device_type: gp2
-            volume_size: "{{ diskB | default(0) }}"
-            delete_on_termination: "{{ delete_disk | default(True) }}"
-            #iops: 50
-      assign_public_ip: False
+            ebs:
+              volume_size: "{{ diskB | default(1) }}"
+              delete_on_termination: "{{ delete_disk | default(True) }}"
+              #iops: 50
+      network:
+        #assign_public_ip: "{{ assign_public_ip | default(False) }}"
+        #assign_public_ip: "{{ assign_public_ip | default(True) }}"
+        assign_public_ip: False
   register: ec2
+
+#- name: Provision instance(s) A
+#  ec2:
+#      region: "{{ region | default('eu-west-2') }}"
+#      key_name: "{{ key | default('szkolenie_05_london') }}"
+#      group: "{{ sg_group | default(generic_vpc.security_groups.name) }}" 
+#      instance_type: "{{ type | default('t3.nano') }}"
+#      image: "{{ ami | default('ami-f1d7c395') }}"
+#      vpc_subnet_id: "{{ subnet | default(subnet.subnet.id) }}"
+#      wait: yes
+#      exact_count: "{{ count | default(1) }}"
+#      source_dest_check: "{{ source_dest_check | default(True) }}"
+#      count_tag:
+#          role: "{{ host_role | default('mgmtszkolenie') }}"
+#          instance_tag: "{{ generic_vpc.ec2_eip.instance_A.tag }}"
+#      instance_tags:
+#          Name: "{{ generic_vpc.ec2_eip.instance_A.name }}" 
+#          instance_tag: "{{ generic_vpc.ec2_eip.instance_A.tag }}"
+#          instance_group: "{{ generic_vpc.instance_group }}"
+#          counter: szkolenie-{{env_name}}
+#          allow_change: True
+#          location: "{{ location |default('london') }}"
+#          role: "{{ host_role | default('mgmtszkolenie') }}"
+#      volumes:
+#          - device_name: /dev/sda1
+#            device_type: gp2
+#            volume_size: "{{ disk | default(55) }}"
+#            delete_on_termination: "{{ delete_disk | default(True) }}"
+#          - device_name: /dev/sdb
+#            device_type: gp2
+#            volume_size: "{{ diskB | default(0) }}"
+#            delete_on_termination: "{{ delete_disk | default(True) }}"
+#            #iops: 50
+#      assign_public_ip: False
+#  register: ec2
 
 - name: Check if we did create a new instance 
   debug: msg="NO NEW INSTANCE CREATED"
@@ -47,17 +89,32 @@
   local_action: debug var={{ item }}  
   with_items: ec2.tagged_instances
 
-- name: Assign Elastic IP to instance A (ec2.tagged_instances[0].id)
+  #- name: Assign Elastic IP to instance A (ec2.tagged_instances[0].id)
+  #  ec2_eip:
+  #    region: "{{ region | default('eu-west-2') }}"
+  #    ip: "{{ generic_vpc.ec2_eip.instance_A.ip }}"
+  #    instance_id: "{{ ec2.tagged_instances[0].id }}"
+  #
+  #- name: List instance A tags
+  #  ec2_tag:
+  #    region: "{{ region | default('eu-west-2') }}"
+  #    resource: "{{ ec2.tagged_instances[0].id }}"
+  #    state: list
+  #  register: tmp_tags
+  #
+  #- debug: msg="{{ tmp_tags }}"
+
+- name: Assign Elastic IP to instance A (ec2.instances[0].id)
   ec2_eip:
     region: "{{ region | default('eu-west-2') }}"
     ip: "{{ generic_vpc.ec2_eip.instance_A.ip }}"
-    instance_id: "{{ ec2.tagged_instances[0].id }}"
+    device_id: "{{ ec2.instances[0].instance_id }}"
 
 - name: List instance A tags
-  ec2_tag:
+  amazon.aws.ec2_tag_info:
     region: "{{ region | default('eu-west-2') }}"
-    resource: "{{ ec2.tagged_instances[0].id }}"
-    state: list
+    resource: "{{ ec2.instances[0].instance_id }}"
+    #state: list
   register: tmp_tags
 
 - debug: msg="{{ tmp_tags }}"

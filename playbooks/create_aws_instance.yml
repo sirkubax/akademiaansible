@@ -34,7 +34,7 @@
   gather_facts: False
 
   vars:
-  - vars_files_var: ["vars/{{ location }}.yml", "vars/location_default.yml"] #Name of the region: irland, frankfurt, etc...
+    -  vars_files_var: ["vars/{{ location }}.yml", "vars/location_default.yml"] #Name of the region: irland, frankfurt, etc...
 
   tasks:
 
@@ -82,7 +82,8 @@
             instance_type: "{{ type | default('t3.nano') }}"
             image_id: "{{ ami | default('ami-47a23a30') }}"
             vpc_subnet_id: "{{ subnet | default('subnet-97f033fe') }}"
-            wait: yes
+            wait: true
+            state: running
             count: 1
             #exact_count: 1
             #count_tag:

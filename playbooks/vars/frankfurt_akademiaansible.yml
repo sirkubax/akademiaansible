@@ -1,0 +1,12 @@
+#ami: ami-05c424d59413a2876 #u20.04
+#ami: ami-053a617c6207ecc7b #u24.04
+ami: ami-0084a47cc718c111a #u24.04
+region: eu-central-1
+subnet: subnet-0ffb824e03f7adc21
+key: szkolenie_frankfurt
+sg: akademiaansible-security-group
+ansible_ssh_private_key_file: ~/.ssh/szkolenie_frankfurt.pem
+location: frankfurt
+assign_public_ip: True
+#ec2_url: "https://ec2.eu-west-2.amazonaws.com"
+

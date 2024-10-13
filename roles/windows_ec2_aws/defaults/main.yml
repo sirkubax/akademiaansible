@@ -1,0 +1,15 @@
+region: eu-west-2
+key_name: szkolenie_05_london
+instance_type: t2.medium
+#image: ami1f9853ca76d115e7b #Windows_Server-2019-English-Full-Base-2021.10.13
+#image: ami-085e6d40d02506bac #Windows_Server-2019-English-Full-Base-2021.10.13
+#image: ami-0fd22a016e4e785f1 #Windows_Server-2019-English-Full-Base-2021.10.13
+#image: ami-0e322684a5a0074ce #Windows_Server-2019-English-Full-Base-2022.12.16
+#image: ami-070c9a4ee0e5d83d5 #Microsoft Windows Server 2022 Full Locale English AMI provided by Amazon
+image: ami-0df480245c4679e0b #Microsoft Windows Server 2019 with Desktop Experience Locale English AMI provided by Amazon
+#image: ami-00ffeb610527f540b #Microsoft Windows Server 2022 Full Locale English AMI provided by Amazon
+vpc_subnet_id: subnet-0d096e74fce44c4d5
+tag_image: sample
+user_data: user_data/winrm.txt
+#instance_role: ec2_iam_role
+

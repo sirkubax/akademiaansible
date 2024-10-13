@@ -10,7 +10,8 @@
   gather_facts: false
 
   vars:
-  - vars_files_var: ["vars/akademiaansible_vpc.yml"]
+    #- vars_files_var: ["vars/akademiaansible_vpc.yml"]
+  - vars_files_var: ["vars/akademiaansible_vpc_frankfurt.yml"]
 
   pre_tasks:
       - include_vars: "{{ item }}"
@@ -38,7 +39,8 @@
   gather_facts: False
 
   vars:
-  - vars_files_var: ["../../../vars/akademiaansible_vpc.yml"]
+    #- vars_files_var: ["../../../vars/akademiaansible_vpc.yml"]
+  - vars_files_var: ["vars/akademiaansible_vpc_frankfurt.yml"]
 
   roles:
       - { role: sys_create_aws_akademiaansible, source_dest_check: False }
@@ -53,7 +55,8 @@
   gather_facts: False
 
   vars:
-  - vars_files_var: ["vars/akademiaansible_vpc.yml"]
+    #- vars_files_var: ["vars/akademiaansible_vpc.yml"]
+  - vars_files_var: ["vars/akademiaansible_vpc_frankfurt.yml"]
 
   pre_tasks:
       - include_vars: "{{ item }}"
@@ -98,7 +101,8 @@
   gather_facts: False
 
   vars:
-  - vars_files_var: ["vars/akademiaansible_vpc.yml"]
+    #- vars_files_var: ["vars/akademiaansible_vpc.yml"]
+  - vars_files_var: ["vars/akademiaansible_vpc_frankfurt.yml"]
 
   pre_tasks:
       - include_vars: "{{ item }}"

@@ -45,7 +45,7 @@
     register: igw 
 
   - name: Lookup route tables
-    ec2_vpc_route_table_facts:
+    community.aws.ec2_vpc_route_table_info:
       region: "{{ region }}"
       filters:
         vpc-id: "{{ vpc.vpc.id }}"

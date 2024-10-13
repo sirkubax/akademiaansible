@@ -1,4 +1,6 @@
-ami: ami-05c424d59413a2876 #u20.04
+#ami: ami-05c424d59413a2876 #u20.04
+#ami: ami-053a617c6207ecc7b #u24.04
+ami: ami-09627c82937ccdd6d #u22.04
 region: eu-west-2
 subnet: subnet-0d096e74fce44c4d5
 #subnet: subnet-084526d4a603f6100
