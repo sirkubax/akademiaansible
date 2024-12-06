@@ -15,9 +15,7 @@ localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env pyth
 
 #grupa apache
 [apache]
-18.130.9.16
-10.238.0.26
-ec2-18-134-129-31.eu-west-2.compute.amazonaws.com
+3.123.229.85
 
 
 [backend]
