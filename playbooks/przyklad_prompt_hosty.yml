@@ -1,0 +1,33 @@
+---
+- name: Dodaj adres IP do grupy naszehosty
+  hosts: localhost
+  gather_facts: false
+
+  vars_prompt:
+    - name: "adres_ip"
+      prompt: "Podaj adres IP hosta do dodania do grupy naszehosty"
+      private: no
+
+  tasks:
+
+    - name: Dodaj adres IP do dynamicznego inwentarza
+      add_host:
+        name: "{{ adres_ip }}"
+        groups: naszehosty
+
+- name: Instalacja Apache na hostach w grupie naszehosty
+  hosts: naszehosty
+  become: yes
+  tasks:
+    - name: Zainstaluj Apache
+      apt:
+        name: apache2
+        state: present
+        update_cache: yes
+
+    - name: Upewnij się, że Apache działa
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
