@@ -1,0 +1,7 @@
+- hosts: naszaaplikacja:apache
+
+  tasks:
+    - name: sprawdz port
+      wait_for: 
+        port: 5081
+        timeout: 3
