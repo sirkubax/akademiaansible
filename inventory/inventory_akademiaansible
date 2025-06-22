@@ -18,16 +18,16 @@ mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/szkolenie_05_london.pem 
 
 #grupa apache
 [apache]
-3.123.229.85
-apache02 ansible_host=10.238.0.160
-ec2-3-70-183-90.eu-central-1.compute.amazonaws.com
+18.184.139.142
+apache02 ansible_host=10.238.0.67
+ec2-63-178-223-171.eu-central-1.compute.amazonaws.com
 przykladhostname02
 
 [db]
-10.238.0.95
+10.238.0.223
 
 [backend]
-10.238.0.69
+10.238.0.219
 
 [prod:children]
 apache
