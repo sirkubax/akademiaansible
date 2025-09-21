@@ -1,0 +1,28 @@
+- hosts: apache
+
+  become: true
+
+  vars:
+    users: {}
+
+  tasks:
+    - name: Add the user 'johnd'
+      ansible.builtin.user:
+        name: "{{ item.username }}"
+        comment: "{{ item.comment | default('') }}"
+        state: "{{ item.state | default('present') }}"
+      loop:
+      - username: johnd
+        comment: john comment
+      - username: kuba
+        state: absent
+        comment: kuba something
+      - username: monica
+
+    - name: Retry a task until a certain condition is met
+      ansible.builtin.shell: /usr/bin/foo
+      register: result
+      until: result.stdout.find("all systems go") != -1
+      retries: 3
+      delay: 10
+
