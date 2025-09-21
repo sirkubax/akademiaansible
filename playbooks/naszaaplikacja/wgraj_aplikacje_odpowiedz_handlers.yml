@@ -22,7 +22,7 @@
         - apache2
         #- libapache2-mod-wsgi
         - libapache2-mod-wsgi-py3 #dla python3
-        - python-dev
+        - python3-dev
 
     - git:
         repo: https://github.com/sirkubax/naszaaplikacja.git

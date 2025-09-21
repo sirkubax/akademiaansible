@@ -13,16 +13,15 @@
       apt: 
         pkg:
           - apache2
-          - libapache2-mod-wsgi
 
     - name: 'zainstaluj aplikacje apache2 i pozostale pakiety przy pomocy with_items'
       apt: 
         name: "{{ item }}"
       loop:
         - apache2
-        - libapache2-mod-wsgi
           #- libapache2-mod-wsgi-py3 #dla python3
-        - python-dev
+        - libapache2-mod-wsgi-py3 #dla python3
+        - python3-dev
 
     - git:
         repo: https://github.com/sirkubax/naszaaplikacja.git

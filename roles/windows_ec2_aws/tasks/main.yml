@@ -1,4 +1,4 @@
-- ec2_instance:
+- amazon.aws.ec2_instance:
     region: "{{ region }}"
     key_name: "{{ key_name }}"
     vpc_subnet_id: "{{ vpc_subnet_id }}"
