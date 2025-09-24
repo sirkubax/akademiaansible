@@ -20,7 +20,9 @@
           name: "Restart Apache JT"        # nazwa JT w AWX
           organization: "Default"
           job_args:
-            limit: "{{ event.payload.limit | default('') }}"
+            #limit: "{{ event.payload.limit | default('') }}"
+            limit: "apache"
             extra_vars:
-              eda_payload: "{{ event.payload | default('') }}"
+              #eda_payload: "{{ event.payload | default('') }}"
+              eda_payload: ""
 
