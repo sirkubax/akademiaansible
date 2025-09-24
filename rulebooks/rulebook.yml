@@ -1,5 +1,6 @@
 # repo: my-eda-repo/rulebooks/webhook_restart.yml
 - name: Webhook -> run AWX JT
+  hosts: all
   sources:
     - ansible.eda.webhook:
         host: 0.0.0.0
