@@ -10,10 +10,11 @@
         limit: 5
   rules:
     - name: Restart Apache via AWX
-      condition: >
-        event.payload is defined and
-        event.payload.service == "apache2" and
-        event.payload.state in ["down", "critical"]
+      condition: event.i == 1
+      #condition: >
+      #  event.payload is defined and
+      #  event.payload.service == "apache2" and
+      #  event.payload.state in ["down", "critical"]
       action:
         run_job_template:
           name: "Restart Apache JT"        # nazwa JT w AWX
