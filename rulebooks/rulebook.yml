@@ -22,5 +22,5 @@
           job_args:
             limit: "{{ event.payload.limit | default('') }}"
             extra_vars:
-              eda_payload: "{{ event.payload }}"
+              eda_payload: "{{ event.payload | default('') }}"
 
