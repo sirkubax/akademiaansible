@@ -9,25 +9,22 @@ localhost ansible_connection=local
 #grupa mgmt
 [mgmt]
 mgmt2.muszynski.pro ansible_ssh_private_key_file=~/.ssh/szkolenie_05_london.pem ciekawa_zmienna=ddddddd jeszcze_inna=1234
-#18.132.121.80 
-#35.178.115.119
-#18.133.152.204 ansible_ssh_private_key_file=~/.ssh/szkolenie_05_london_sodo.pem
 
 [jenkins]
 35.177.203.22
 
 #grupa apache
 [apache]
-18.193.122.150
-apache02 ansible_host=35.158.128.247
-ec2-3-78-251-246.eu-central-1.compute.amazonaws.com
+18.153.52.116
+apache02 ansible_host=3.125.157.109
+ec2-3-78-225-119.eu-central-1.compute.amazonaws.com
 przykladhostname02
 
 [db]
-10.238.0.38
+10.238.0.180
 
 [backend]
-10.238.0.219
+10.238.0.41
 
 [prod:children]
 apache
