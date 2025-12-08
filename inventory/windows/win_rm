@@ -1,0 +1,41 @@
+[windows_winrm]
+#aws-win-host
+#4.9.147.205
+#ec2-18-134-150-153.eu-west-2.compute.amazonaws.com
+ec2-3-79-14-90.eu-central-1.compute.amazonaws.com
+
+[windows_winrm:vars]
+ansible_connection=winrm
+ansible_port=5986
+
+ansible_user=Administrator
+#ansible_password=myTempPassword123!
+ansible_password='{{ win_rm_pass_kuba }}'
+ansible_winrm_server_cert_validation=ignore
+ansible_winrm_transport=basic
+
+
+
+#winrm quickconfig -transport:https
+#
+#
+#PS C:\Users\Administrator> winrm quickconfig -transport:https
+#WinRM service is already running on this machine.
+#WSManFault
+#    Message
+#        ProviderFault
+#            WSManFault
+#                Message = Cannot create a WinRM listener on HTTPS because this machine does not have an appropriate certificate. To be used for SSL, a certificate must have a CN matching the hostname, be appropriate for Server Authentication, and not be expired, revoked, or self-signed.
+#
+#Error number:  -2144108267 0x80338115
+#Cannot create a WinRM listener on HTTPS because this machine does not have an appropriate certificate. To be used for SSL, a certificate must have a CN matching the hostname, be appropriate for Server Authentication, and not be expired, revoked, or self-signed.
+#
+#
+#https://gist.github.com/mapbutcher/6016861
+#set-executionpolicy -executionpolicy remotesigned
+#winrm quickconfig -q
+#winrm set winrm/config/winrs '@{MaxMemoryPerShellMB="512"}'
+#winrm set winrm/config '@{MaxTimeoutms="1800000"}'
+#winrm set winrm/config/service '@{AllowUnencrypted="true"}'
+#winrm set winrm/config/service/auth '@{Basic="true"}'
+#

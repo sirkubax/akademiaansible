@@ -1,0 +1,14 @@
+[windows_ssh]
+#aws-win-host
+#4.9.147.205
+#ec2-18-134-150-153.eu-west-2.compute.amazonaws.com
+#ec2-3-73-158-3.eu-central-1.compute.amazonaws.com
+3.73.158.3
+
+[windows_ssh:vars]
+ansible_connection=ssh
+
+ansible_shell_type=cmd
+
+ansible_user=Administrator
+ansible_password='{{ win_ssh_pass_kuba }}'
