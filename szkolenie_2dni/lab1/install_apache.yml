@@ -1,0 +1,51 @@
+---
+# LAB 1 — Playbook instalacji Apache
+# Uruchomienie:
+#   ansible-playbook -i ../lab0_w1/inventory/hosts.yml install_apache.yml
+#
+# Uzupelnij miejsca oznaczone # TODO
+
+- name: Instalacja i konfiguracja Apache
+  hosts: webservers
+  become: true
+
+  handlers:
+    # TODO: Dodaj handler o nazwie "reload apache"
+    #       ktory przeladuje usluge apache2
+    - name: reload apache
+      service:
+        name:  # TODO: nazwa uslugi
+        state: # TODO: stan po przeladowaniu
+
+  tasks:
+
+    - name: Zainstaluj apache2
+      # TODO: Uzyj modulu apt
+      #       Zainstaluj pakiet apache2
+      #       Wlacz update_cache z cache_valid_time: 3600
+
+    - name: Uruchom i wlacz autostart apache2
+      # TODO: Uzyj modulu service
+      #       Ustaw state: started i enabled: true
+
+    - name: Stworz katalog aplikacji
+      # TODO: Uzyj modulu file
+      #       Sciezka: /var/www/html/app
+      #       Stan: directory
+      #       Wlasciciel: www-data, grupa: www-data
+
+    - name: Wgraj strone glowna
+      copy:
+        src: files/index.html
+        dest: /var/www/html/app/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
+      # TODO: Dodaj notify do handlera "reload apache"
+
+    - name: Sprawdz ze Apache odpowiada na porcie 80
+      wait_for:
+        host: localhost
+        port: 80
+        state: started
+        timeout: 10

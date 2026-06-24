@@ -1,0 +1,12 @@
+---
+# LAB 2 — ODPOWIEDZ
+# Uruchomienie:
+#   ansible-playbook -i inventory/hosts.yml site_odpowiedz.yml --check --diff
+#   ansible-playbook -i inventory/hosts.yml site_odpowiedz.yml
+
+- name: Wdrozenie serwera webowego
+  hosts: webservers
+  become: true
+
+  roles:
+    - webserver_odpowiedz

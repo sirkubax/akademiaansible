@@ -1,0 +1,24 @@
+# Wygenerowano przez Ansible — nie edytuj recznie!
+# Host: {{ ansible_hostname }}
+
+<VirtualHost *:{{ apache_port | default(80) }}>
+
+    # TODO: Dodaj dyrektywe ServerName
+    #       Uzyj faktu ansible_fqdn
+    # ServerName ???
+
+    # TODO: Dodaj dyrektywe DocumentRoot
+    #       Uzyj zmiennej apache_docroot
+    # DocumentRoot ???
+
+    <Directory "{{ apache_docroot | default('/var/www/html') }}">
+        Options Indexes FollowSymLinks
+        AllowOverride None
+        Require all granted
+    </Directory>
+
+    # TODO: Dodaj logi — w nazwie pliku uzyj ansible_hostname
+    # ErrorLog  /var/log/apache2/???_error.log
+    # CustomLog /var/log/apache2/???_access.log combined
+
+</VirtualHost>

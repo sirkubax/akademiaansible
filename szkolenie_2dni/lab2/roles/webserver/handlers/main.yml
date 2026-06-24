@@ -1,0 +1,7 @@
+---
+# TODO: Skopiuj handler z LAB 1 i dostosuj — uzyj zmiennej webserver_service
+#
+# - name: reload webserver
+#   service:
+#     name: ???
+#     state: reloaded

@@ -1,0 +1,5 @@
+---
+# TODO: Uzupelnij zmienne dla grupy webservers
+
+# apache_docroot: ???        # <-- sciezka do katalogu aplikacji
+# apache_port: ???           # <-- port nasluchiwania

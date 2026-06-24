@@ -1,0 +1,19 @@
+# TODO: Skopiuj i uzupelnij szablon z lab_w2
+#       Uzyj zmiennych roli: webserver_port, webserver_docroot
+#       Uzyj faktow: ansible_fqdn, ansible_hostname
+
+# <VirtualHost *:{{ webserver_port | default(80) }}>
+#
+#     ServerName  ???
+#     DocumentRoot ???
+#
+#     <Directory "{{ webserver_docroot | default('/var/www/html') }}">
+#         Options Indexes FollowSymLinks
+#         AllowOverride None
+#         Require all granted
+#     </Directory>
+#
+#     ErrorLog  /var/log/apache2/???_error.log
+#     CustomLog /var/log/apache2/???_access.log combined
+#
+# </VirtualHost>

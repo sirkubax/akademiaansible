@@ -1,0 +1,13 @@
+---
+# LAB 2 — punkt wejscia projektu
+# Uruchomienie:
+#   ansible-playbook -i inventory/hosts.yml site.yml --check --diff
+#   ansible-playbook -i inventory/hosts.yml site.yml
+
+- name: Wdrozenie serwera webowego
+  hosts: webservers
+  become: true
+
+  roles:
+    # TODO: Wywolaj role "webserver"
+    # - webserver

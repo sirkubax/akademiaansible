@@ -1,0 +1,18 @@
+# Wygenerowano przez Ansible — nie edytuj recznie!
+# Host: {{ ansible_hostname }}
+
+<VirtualHost *:{{ webserver_port | default(80) }}>
+
+    ServerName  {{ ansible_fqdn }}
+    DocumentRoot {{ webserver_docroot | default('/var/www/html') }}
+
+    <Directory "{{ webserver_docroot | default('/var/www/html') }}">
+        Options Indexes FollowSymLinks
+        AllowOverride None
+        Require all granted
+    </Directory>
+
+    ErrorLog  /var/log/apache2/{{ ansible_hostname }}_error.log
+    CustomLog /var/log/apache2/{{ ansible_hostname }}_access.log combined
+
+</VirtualHost>

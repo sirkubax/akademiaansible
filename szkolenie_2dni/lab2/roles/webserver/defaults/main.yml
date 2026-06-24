@@ -1,0 +1,7 @@
+---
+# TODO: Zdefiniuj zmienne domyslne roli webserver
+#
+# webserver_port: ???        # port nasluchiwania (domyslnie 80)
+# webserver_docroot: ???     # katalog aplikacji (domyslnie /var/www/html)
+# webserver_package: ???     # nazwa pakietu (apache2 dla Debian)
+# webserver_service: ???     # nazwa uslugi (apache2 dla Debian)

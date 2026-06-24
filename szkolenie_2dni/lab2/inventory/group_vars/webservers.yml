@@ -1,0 +1,4 @@
+---
+# Zmienne wspolne dla grupy webservers
+webserver_port: 80
+webserver_docroot: /var/www/myapp

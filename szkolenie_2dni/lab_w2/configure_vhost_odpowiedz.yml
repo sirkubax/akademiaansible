@@ -1,0 +1,39 @@
+---
+# Warsztat 2 — ODPOWIEDZ
+# Uruchomienie:
+#   ansible-playbook -i inventory/hosts.yml configure_vhost_odpowiedz.yml --check --diff
+
+- name: Konfiguracja Apache Virtual Host
+  hosts: webservers
+  become: true
+
+  handlers:
+    - name: reload apache
+      service:
+        name: apache2
+        state: reloaded
+
+  tasks:
+
+    - name: Upewnij sie ze katalog aplikacji istnieje
+      file:
+        path: "{{ apache_docroot | default('/var/www/html') }}"
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: '0755'
+
+    - name: Wgraj konfiguracje Virtual Host z szablonu
+      template:
+        src: templates/apache_vhost_odpowiedz.conf.j2
+        dest: /etc/apache2/sites-available/myapp.conf
+        owner: root
+        group: root
+        mode: '0644'
+      notify: reload apache
+
+    - name: Wlacz site w Apache
+      command: a2ensite myapp.conf
+      args:
+        creates: /etc/apache2/sites-enabled/myapp.conf
+      notify: reload apache

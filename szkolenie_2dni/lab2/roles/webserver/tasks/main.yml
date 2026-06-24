@@ -1,0 +1,45 @@
+---
+# TODO: Przenieś i dostosuj taski z LAB 1
+#       Zastąp hardcodowane wartości zmiennymi z defaults/main.yml
+
+# - name: Zainstaluj webserver
+#   package:
+#     name: ???                   # uzyj webserver_package
+#     state: present
+#   # wskazowka: dodaj when dla Debian/RedHat jesli chcesz
+
+# - name: Uruchom i wlacz autostart
+#   service:
+#     name: ???                   # uzyj webserver_service
+#     state: started
+#     enabled: true
+
+# - name: Stworz katalog aplikacji
+#   file:
+#     path: ???                   # uzyj webserver_docroot
+#     state: directory
+#     owner: www-data
+#     group: www-data
+#     mode: '0755'
+
+# - name: Wgraj strone glowna
+#   copy:
+#     src: index.html             # plik w roles/webserver/files/
+#     dest: "{{ webserver_docroot }}/index.html"
+#     owner: www-data
+#     group: www-data
+#     mode: '0644'
+#   notify: reload webserver
+
+# - name: Wgraj konfiguracje Virtual Host z szablonu
+#   template:
+#     src: vhost.conf.j2          # plik w roles/webserver/templates/
+#     dest: /etc/apache2/sites-available/myapp.conf
+#   notify: reload webserver
+
+# - name: Sprawdz ze webserver odpowiada
+#   wait_for:
+#     host: localhost
+#     port: ???                   # uzyj webserver_port
+#     state: started
+#     timeout: 10

@@ -1,0 +1,5 @@
+---
+webserver_port: 80
+webserver_docroot: /var/www/html
+webserver_package: apache2
+webserver_service: apache2
