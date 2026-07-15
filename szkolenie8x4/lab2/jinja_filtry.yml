@@ -1,0 +1,54 @@
+---
+# LAB 2 — Krok 3: filtry Jinja2
+# Uruchomienie:
+#   ansible-playbook jinja_filtry.yml
+#
+# Zastap teksty "TODO" wyrazeniami Jinja2 z filtrami (dane sa w dane.yml)
+
+- name: Filtry Jinja2 w praktyce
+  hosts: localhost
+  gather_facts: false
+
+  vars_files:
+    - dane.yml
+
+  tasks:
+
+    - name: 1. default — wartosc domyslna
+      debug:
+        # TODO: zmienna opis_projektu NIE istnieje — uzyj filtra
+        #       default('brak opisu') zeby playbook sie nie wywalil
+        msg: "Opis projektu: TODO"
+
+    - name: 2. join — lista w jednej linii
+      debug:
+        # TODO: polacz liste pakiety w tekst rozdzielony ', '
+        msg: "Pakiety: TODO"
+
+    - name: 3. length — ile elementow
+      debug:
+        # TODO: policz elementy listy uzytkownicy filtrem length
+        msg: "Liczba uzytkownikow: TODO"
+
+    - name: 4. upper — wielkie litery
+      debug:
+        # TODO: aplikacja.nazwa wielkimi literami
+        msg: "TODO"
+
+    - name: 5. map — wyciagnij jedno pole z listy slownikow
+      debug:
+        # TODO: lista SAMYCH imion uzytkownikow
+        #       uzytkownicy | map(attribute='...') | list
+        msg: "Imiona: TODO"
+
+    - name: 6. selectattr — przefiltruj liste slownikow
+      debug:
+        # TODO: imiona TYLKO aktywnych uzytkownikow
+        #       uzytkownicy | selectattr('aktywny') | map(...) | list
+        msg: "Aktywni: TODO"
+
+    - name: 7. Klucze slownika — nazwy srodowisk
+      debug:
+        # TODO: nazwy srodowisk to KLUCZE slownika srodowiska
+        #       srodowiska.keys() | list
+        msg: "Srodowiska: TODO"

@@ -1,0 +1,52 @@
+---
+# LAB 1 — Pierwszy playbook (ROZWIAZANIE)
+# Uruchomienie:
+#   ansible-playbook -i inventory/hosts.yml pierwszy_playbook_odpowiedz.yml
+
+- name: Pierwszy playbook — poznajemy hosty
+  hosts: all
+  become: false
+  gather_facts: true
+
+  vars:
+    katalog_lab: /tmp/szkolenie8x4
+    powitanie: "Witaj na szkoleniu Ansible 8x4h!"
+
+  tasks:
+
+    - name: Sprawdz polaczenie
+      ping:
+
+    - name: Przedstaw hosta
+      debug:
+        msg: >
+          Jestem {{ inventory_hostname }},
+          system: {{ ansible_distribution }} {{ ansible_distribution_version }},
+          RAM: {{ ansible_memtotal_mb }} MB
+
+    - name: Wyswietl powitanie
+      debug:
+        msg: "{{ powitanie }}"
+
+    - name: Stworz katalog laboratoryjny
+      file:
+        path: "{{ katalog_lab }}"
+        state: directory
+        mode: '0755'
+
+    - name: Zapisz wizytowke hosta do pliku
+      copy:
+        dest: "{{ katalog_lab }}/wizytowka.txt"
+        content: |
+          Host:   {{ inventory_hostname }}
+          System: {{ ansible_distribution }} {{ ansible_distribution_version }}
+          IP:     {{ ansible_default_ipv4.address }}
+
+    - name: Sprawdz uptime
+      command: uptime
+      register: wynik_uptime
+      changed_when: false      # samo odczytanie nie zmienia stanu hosta
+
+    - name: Pokaz uptime
+      debug:
+        msg: "{{ wynik_uptime.stdout }}"

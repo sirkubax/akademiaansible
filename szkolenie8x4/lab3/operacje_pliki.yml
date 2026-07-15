@@ -1,0 +1,74 @@
+---
+# LAB 3 — Krok 2: pliki konfiguracyjne
+# Uruchomienie:
+#   ansible-playbook -i inventory/hosts.yml operacje_pliki.yml
+#
+# Uzupelnij miejsca oznaczone # TODO
+
+- name: Standard firmowy — pliki konfiguracyjne
+  hosts: all
+  become: true
+
+  vars:
+    katalog_konfiguracji: /etc/szkolenie
+    plik_konfiguracji: /etc/szkolenie/app.conf
+
+  tasks:
+
+    # GOTOWE — przeanalizuj: template + backup
+    - name: Firmowy MOTD z szablonu
+      template:
+        src: templates/motd.j2
+        dest: /etc/motd
+        owner: root
+        group: root
+        mode: '0644'
+        backup: true
+
+    - name: Katalog konfiguracji aplikacji
+      file:
+        path: "{{ katalog_konfiguracji }}"
+        state: directory
+        mode: '0755'
+
+    # GOTOWE — przeanalizuj: dlaczego force: false jest tu KLUCZOWE?
+    # (co by sie stalo z log_level przy kazdym uruchomieniu bez tego?)
+    - name: Konfiguracja poczatkowa aplikacji (tylko gdy brak pliku)
+      copy:
+        content: |
+          # Konfiguracja aplikacji szkoleniowej
+          app_name=sklep
+          log_level=info
+          port=8080
+        dest: "{{ plik_konfiguracji }}"
+        mode: '0644'
+        force: false
+
+    - name: Wlacz logowanie debug
+      # TODO: Uzyj modulu lineinfile
+      #       Plik: {{ plik_konfiguracji }}
+      #       Znajdz linie zaczynajaca sie od log_level=   (regexp: '^log_level=')
+      #       Zamien na: log_level=debug
+
+    - name: Dopisz sekcje monitoringu
+      # TODO: Uzyj modulu blockinfile
+      #       Plik: {{ plik_konfiguracji }}
+      #       Marker: "# {mark} ANSIBLE MANAGED — monitoring"
+      #       Blok (block, 2 linie):
+      #         monitoring_enabled=true
+      #         monitoring_port=9100
+
+    - name: Pobierz gotowa konfiguracje z hostow
+      # TODO: Uzyj modulu fetch
+      #       Zrodlo: {{ plik_konfiguracji }}
+      #       Cel: pobrane/   (katalog na control node)
+
+    # GOTOWE — pokazujemy efekt koncowy
+    - name: Odczytaj koncowa zawartosc pliku
+      command: "cat {{ plik_konfiguracji }}"
+      register: konfiguracja
+      changed_when: false
+
+    - name: Pokaz koncowa konfiguracje
+      debug:
+        msg: "{{ konfiguracja.stdout_lines }}"

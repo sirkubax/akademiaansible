@@ -1,0 +1,92 @@
+---
+# LAB 3 — BONUS: caly stos storage na urzadzeniu loop
+#
+# "Dyskiem" jest zwykly plik 300 MB podpiety jako /dev/loopX —
+# cwiczymy parted-owy stos (LVM -> filesystem -> mount) BEZ ryzyka
+# dla prawdziwych danych.
+#
+# Ten playbook jest KOMPLETNY — przeczytaj go, zrozum i uruchom:
+#   ansible-playbook -i inventory/hosts.yml dyski_bonus.yml
+# Po cwiczeniu posprzataj:
+#   ansible-playbook -i inventory/hosts.yml dyski_sprzatanie.yml
+
+- name: BONUS — LVM, filesystem i mount na urzadzeniu loop
+  hosts: all
+  become: true
+
+  vars:
+    plik_dysku: /var/tmp/lab_dysk.img
+    rozmiar_pliku: 300M
+    grupa_wolumenow: vg_lab
+    wolumen: lv_dane
+    punkt_montowania: /mnt/lab_dysk
+
+  tasks:
+
+    - name: Upewnij sie ze narzedzia LVM sa zainstalowane
+      apt:
+        name: lvm2
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+
+    # creates: → jesli plik istnieje, task jest pomijany (idempotencja
+    # dla komend, ktore same z siebie nie sa idempotentne)
+    - name: Stworz plik-dysk
+      command: "truncate -s {{ rozmiar_pliku }} {{ plik_dysku }}"
+      args:
+        creates: "{{ plik_dysku }}"
+
+    # losetup nie jest idempotentny — najpierw sprawdzamy,
+    # czy plik nie jest juz podpiety
+    - name: Sprawdz czy plik jest juz podpiety jako urzadzenie loop
+      command: "losetup -j {{ plik_dysku }}"
+      register: loop_sprawdzenie
+      changed_when: false
+
+    - name: Podepnij plik jako urzadzenie loop
+      command: "losetup --find --show {{ plik_dysku }}"
+      register: loop_nowe
+      when: loop_sprawdzenie.stdout | length == 0
+
+    # wynik "losetup -j" wyglada tak: "/dev/loop7: []: (/var/tmp/lab_dysk.img)"
+    # split(':')[0] wycina sama nazwe urzadzenia
+    - name: Ustal nazwe urzadzenia loop
+      set_fact:
+        urzadzenie: "{{ loop_nowe.stdout | default(loop_sprawdzenie.stdout.split(':')[0]) }}"
+
+    - name: Grupa wolumenow LVM na urzadzeniu loop
+      community.general.lvg:
+        vg: "{{ grupa_wolumenow }}"
+        pvs: "{{ urzadzenie }}"
+
+    - name: Wolumen logiczny 200 MB
+      community.general.lvol:
+        vg: "{{ grupa_wolumenow }}"
+        lv: "{{ wolumen }}"
+        size: 200m
+
+    # idempotentny: jesli FS juz istnieje — nie formatuje ponownie
+    - name: System plikow ext4
+      community.general.filesystem:
+        fstype: ext4
+        dev: "/dev/{{ grupa_wolumenow }}/{{ wolumen }}"
+
+    # nofail → urzadzenie loop znika po restarcie hosta; bez nofail
+    # wpis w fstab zablokowalby bootowanie maszyny!
+    - name: Zamontuj wolumen
+      ansible.posix.mount:
+        path: "{{ punkt_montowania }}"
+        src: "/dev/{{ grupa_wolumenow }}/{{ wolumen }}"
+        fstype: ext4
+        opts: defaults,nofail
+        state: mounted
+
+    - name: Sprawdz efekt
+      command: "df -h {{ punkt_montowania }}"
+      register: df_wynik
+      changed_when: false
+
+    - name: Pokaz zamontowany wolumen
+      debug:
+        msg: "{{ df_wynik.stdout_lines }}"

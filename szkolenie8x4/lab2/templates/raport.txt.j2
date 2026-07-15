@@ -1,0 +1,19 @@
+=========================================================
+ RAPORT: {{ aplikacja.nazwa }} v{{ aplikacja.wersja }}
+ Wygenerowano przez Ansible na hoscie: {{ ansible_hostname }}
+=========================================================
+
+Pakiety ({{ pakiety | length }}): {{ pakiety | join(', ') }}
+
+Uzytkownicy:
+{# TODO: petla {% for u in uzytkownicy %} ... {% endfor %}
+   Kazda linia:  - imie (rola)
+   Bonus: gdy u.aktywny == false dopisz [NIEAKTYWNY]
+   Skladnia warunku inline: {% if not u.aktywny %}...{% endif %}  #}
+
+
+Srodowiska:
+{# TODO: petla po slowniku:
+   {% for nazwa, cfg in srodowiska.items() %} ... {% endfor %}
+   Kazda linia:  - nazwa: db=..., repliki=...  #}
+

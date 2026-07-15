@@ -1,0 +1,58 @@
+---
+# LAB 1 — Pierwszy playbook
+# Uruchomienie:
+#   ansible-playbook -i inventory/hosts.yml pierwszy_playbook.yml
+#
+# Uzupelnij miejsca oznaczone # TODO
+
+- name: Pierwszy playbook — poznajemy hosty
+  hosts: all
+  become: false
+  gather_facts: true
+
+  vars:
+    katalog_lab: /tmp/szkolenie8x4
+    # TODO: Dodaj zmienna "powitanie" z dowolnym tekstem
+
+  tasks:
+
+    - name: Sprawdz polaczenie
+      # TODO: Uzyj modulu ping (modul nie przyjmuje parametrow)
+
+    - name: Przedstaw hosta
+      debug:
+        msg: >
+          Jestem {{ inventory_hostname }},
+          system: {{ ansible_distribution }} {{ ansible_distribution_version }},
+          RAM: {{ ansible_memtotal_mb }} MB
+
+    - name: Wyswietl powitanie
+      # TODO: Uzyj modulu debug
+      #       Wyswietl wartosc zmiennej "powitanie"
+
+    - name: Stworz katalog laboratoryjny
+      # TODO: Uzyj modulu file
+      #       Sciezka: uzyj zmiennej katalog_lab
+      #       Stan: directory
+      #       Uprawnienia: '0755'
+
+    - name: Zapisz wizytowke hosta do pliku
+      copy:
+        dest: "{{ katalog_lab }}/wizytowka.txt"
+        # TODO: W parametrze content umiesc tekst zawierajacy:
+        #       - nazwe hosta (inventory_hostname)
+        #       - dystrybucje (ansible_distribution)
+        #       - adres IP (ansible_default_ipv4.address)
+        content: |
+          Host:
+          System:
+          IP:
+
+    - name: Sprawdz uptime
+      command: uptime
+      register: wynik_uptime
+      changed_when: false      # samo odczytanie nie zmienia stanu hosta
+
+    - name: Pokaz uptime
+      debug:
+        msg: "{{ wynik_uptime.stdout }}"

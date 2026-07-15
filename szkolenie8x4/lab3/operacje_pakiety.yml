@@ -1,0 +1,48 @@
+---
+# LAB 3 — Krok 1: pakiety i aktualizacja systemu
+# Uruchomienie:
+#   ansible-playbook -i inventory/hosts.yml operacje_pakiety.yml
+#
+# Uzupelnij miejsca oznaczone # TODO
+
+- name: Standard firmowy — pakiety i aktualizacja
+  hosts: all
+  become: true
+
+  tasks:
+
+    - name: Zainstaluj firmowy zestaw narzedzi
+      # TODO: Uzyj modulu apt
+      #       Pakiety (lista): htop, vim, curl, tree
+      #       Stan: present
+      #       Odswiez cache (update_cache), ale nie czesciej
+      #       niz raz na godzine (cache_valid_time: 3600)
+
+    - name: Usun nano wraz z konfiguracja
+      # TODO: Uzyj modulu apt
+      #       Pakiet: nano
+      #       Stan: absent
+      #       Usun tez pliki konfiguracyjne (purge)
+      #       i osierocone zaleznosci (autoremove)
+
+    - name: Bezpieczna aktualizacja systemu
+      # TODO: Uzyj modulu apt
+      #       Tryb aktualizacji: safe   (parametr upgrade)
+
+    # Ponizsze taski sa GOTOWE — przeanalizuj je.
+    # To zajawka spotkania 4: register + when.
+
+    - name: Sprawdz czy system wymaga restartu
+      stat:
+        path: /var/run/reboot-required
+      register: reboot_required
+
+    - name: Poinformuj o koniecznosci restartu
+      debug:
+        msg: >
+          UWAGA: {{ inventory_hostname }} wymaga restartu
+          po aktualizacji (jadro/libc).
+      when: reboot_required.stat.exists
+
+    # Swiadomie NIE restartujemy hostow w labie.
+    # Na produkcji: modul reboot + serial (patrz prezentacja).

@@ -1,0 +1,41 @@
+---
+# LAB 2 — Krok 3: filtry Jinja2 (ROZWIAZANIE)
+# Uruchomienie:
+#   ansible-playbook jinja_filtry_odpowiedz.yml
+
+- name: Filtry Jinja2 w praktyce
+  hosts: localhost
+  gather_facts: false
+
+  vars_files:
+    - dane.yml
+
+  tasks:
+
+    - name: 1. default — wartosc domyslna
+      debug:
+        msg: "Opis projektu: {{ opis_projektu | default('brak opisu') }}"
+
+    - name: 2. join — lista w jednej linii
+      debug:
+        msg: "Pakiety: {{ pakiety | join(', ') }}"
+
+    - name: 3. length — ile elementow
+      debug:
+        msg: "Liczba uzytkownikow: {{ uzytkownicy | length }}"
+
+    - name: 4. upper — wielkie litery
+      debug:
+        msg: "{{ aplikacja.nazwa | upper }}"
+
+    - name: 5. map — wyciagnij jedno pole z listy slownikow
+      debug:
+        msg: "Imiona: {{ uzytkownicy | map(attribute='name') | list }}"
+
+    - name: 6. selectattr — przefiltruj liste slownikow
+      debug:
+        msg: "Aktywni: {{ uzytkownicy | selectattr('aktywny') | map(attribute='name') | list }}"
+
+    - name: 7. Klucze slownika — nazwy srodowisk
+      debug:
+        msg: "Srodowiska: {{ srodowiska.keys() | list }}"

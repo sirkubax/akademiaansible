@@ -1,0 +1,39 @@
+---
+# LAB 2 — Krok 2: dostep do struktur danych (ROZWIAZANIE)
+# Uruchomienie:
+#   ansible-playbook struktury_danych_odpowiedz.yml
+
+- name: Struktury danych YAML w praktyce
+  hosts: localhost
+  gather_facts: false
+
+  vars_files:
+    - dane.yml
+
+  tasks:
+
+    - name: 1. Nazwa i wersja aplikacji
+      debug:
+        msg: "Aplikacja {{ aplikacja.nazwa }} w wersji {{ aplikacja.wersja }}"
+
+    - name: 2. Drugi pakiet z listy
+      debug:
+        msg: "Drugi pakiet to: {{ pakiety[1] }}"
+
+    - name: 3. Nazwa pierwszego uzytkownika
+      debug:
+        msg: "Pierwszy uzytkownik: {{ uzytkownicy[0].name }}"
+
+    - name: 4. Grupy uzytkownika anna
+      debug:
+        msg: "Grupy anny: {{ uzytkownicy[1].grupy }}"
+
+    - name: 5. Baza danych srodowiska prod
+      debug:
+        msg: "Prod laczy sie z baza: {{ srodowiska.prod.db_host }}
+              (zapis alternatywny: {{ srodowiska['prod']['db_host'] }})"
+
+    - name: 6. Petla po uzytkownikach — imie i rola
+      debug:
+        msg: "{{ item.name }} ({{ item.role }})"
+      loop: "{{ uzytkownicy }}"

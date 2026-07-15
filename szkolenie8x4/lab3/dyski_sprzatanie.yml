@@ -1,0 +1,52 @@
+---
+# LAB 3 — BONUS: sprzatanie po cwiczeniu dyskowym
+# Cofa wszystko, co zrobil dyski_bonus.yml (w ODWROTNEJ kolejnosci!)
+#   ansible-playbook -i inventory/hosts.yml dyski_sprzatanie.yml
+
+- name: BONUS — sprzatanie stosu storage
+  hosts: all
+  become: true
+
+  vars:
+    plik_dysku: /var/tmp/lab_dysk.img
+    grupa_wolumenow: vg_lab
+    wolumen: lv_dane
+    punkt_montowania: /mnt/lab_dysk
+
+  tasks:
+
+    - name: Odmontuj wolumen i usun wpis z fstab
+      ansible.posix.mount:
+        path: "{{ punkt_montowania }}"
+        state: absent
+
+    - name: Usun wolumen logiczny
+      community.general.lvol:
+        vg: "{{ grupa_wolumenow }}"
+        lv: "{{ wolumen }}"
+        state: absent
+        force: true
+
+    - name: Usun grupe wolumenow
+      community.general.lvg:
+        vg: "{{ grupa_wolumenow }}"
+        state: absent
+
+    - name: Znajdz urzadzenie loop pliku
+      command: "losetup -j {{ plik_dysku }}"
+      register: loop_sprawdzenie
+      changed_when: false
+
+    - name: Odepnij urzadzenie loop
+      command: "losetup -d {{ loop_sprawdzenie.stdout.split(':')[0] }}"
+      when: loop_sprawdzenie.stdout | length > 0
+
+    - name: Usun plik-dysk
+      file:
+        path: "{{ plik_dysku }}"
+        state: absent
+
+    - name: Usun punkt montowania
+      file:
+        path: "{{ punkt_montowania }}"
+        state: absent

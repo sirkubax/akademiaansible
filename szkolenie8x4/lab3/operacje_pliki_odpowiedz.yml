@@ -1,0 +1,71 @@
+---
+# LAB 3 — Krok 2: pliki konfiguracyjne (ROZWIAZANIE)
+# Uruchomienie:
+#   ansible-playbook -i inventory/hosts.yml operacje_pliki_odpowiedz.yml
+
+- name: Standard firmowy — pliki konfiguracyjne
+  hosts: all
+  become: true
+
+  vars:
+    katalog_konfiguracji: /etc/szkolenie
+    plik_konfiguracji: /etc/szkolenie/app.conf
+
+  tasks:
+
+    - name: Firmowy MOTD z szablonu
+      template:
+        src: templates/motd.j2
+        dest: /etc/motd
+        owner: root
+        group: root
+        mode: '0644'
+        backup: true
+
+    - name: Katalog konfiguracji aplikacji
+      file:
+        path: "{{ katalog_konfiguracji }}"
+        state: directory
+        mode: '0755'
+
+    # force: false → plik powstaje tylko RAZ; potem nalezy juz
+    # do lineinfile/blockinfile. Bez tego copy nadpisywalby
+    # log_level=info przy kazdym uruchomieniu (ping-pong zmian).
+    - name: Konfiguracja poczatkowa aplikacji (tylko gdy brak pliku)
+      copy:
+        content: |
+          # Konfiguracja aplikacji szkoleniowej
+          app_name=sklep
+          log_level=info
+          port=8080
+        dest: "{{ plik_konfiguracji }}"
+        mode: '0644'
+        force: false
+
+    - name: Wlacz logowanie debug
+      lineinfile:
+        path: "{{ plik_konfiguracji }}"
+        regexp: '^log_level='
+        line: log_level=debug
+
+    - name: Dopisz sekcje monitoringu
+      blockinfile:
+        path: "{{ plik_konfiguracji }}"
+        marker: "# {mark} ANSIBLE MANAGED — monitoring"
+        block: |
+          monitoring_enabled=true
+          monitoring_port=9100
+
+    - name: Pobierz gotowa konfiguracje z hostow
+      fetch:
+        src: "{{ plik_konfiguracji }}"
+        dest: pobrane/
+
+    - name: Odczytaj koncowa zawartosc pliku
+      command: "cat {{ plik_konfiguracji }}"
+      register: konfiguracja
+      changed_when: false
+
+    - name: Pokaz koncowa konfiguracje
+      debug:
+        msg: "{{ konfiguracja.stdout_lines }}"

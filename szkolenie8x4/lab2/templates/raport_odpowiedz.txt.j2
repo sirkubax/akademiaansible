@@ -1,0 +1,17 @@
+=========================================================
+ RAPORT: {{ aplikacja.nazwa }} v{{ aplikacja.wersja }}
+ Wygenerowano przez Ansible na hoscie: {{ ansible_hostname }}
+=========================================================
+
+Pakiety ({{ pakiety | length }}): {{ pakiety | join(', ') }}
+
+Uzytkownicy:
+{% for u in uzytkownicy %}
+ - {{ u.name }} ({{ u.role }}){% if not u.aktywny %} [NIEAKTYWNY]{% endif %}
+
+{% endfor %}
+
+Srodowiska:
+{% for nazwa, cfg in srodowiska.items() %}
+ - {{ nazwa }}: db={{ cfg.db_host }}, repliki={{ cfg.replicas }}
+{% endfor %}

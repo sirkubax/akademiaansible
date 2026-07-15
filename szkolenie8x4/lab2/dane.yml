@@ -1,0 +1,45 @@
+---
+# LAB 2 — przykladowe struktury danych
+# Ten plik ladujemy w playbookach przez vars_files
+
+aplikacja:                    # slownik
+  nazwa: sklep-internetowy
+  wersja: "2.5.1"             # cudzyslow! bez niego YAML widzi liczbe
+  port: 8080
+  debug: false
+
+pakiety:                      # lista
+  - nginx
+  - postgresql
+  - redis
+
+uzytkownicy:                  # lista slownikow
+  - name: jan
+    uid: 1501
+    role: admin
+    aktywny: true
+    grupy: [admins, docker]
+  - name: anna
+    uid: 1502
+    role: developer
+    aktywny: true
+    grupy: [developers]
+  - name: piotr
+    uid: 1503
+    role: tester
+    aktywny: false
+    grupy: [testers]
+
+srodowiska:                   # slownik slownikow
+  dev:
+    db_host: dev-db.firma.local
+    replicas: 1
+    debug: true
+  test:
+    db_host: test-db.firma.local
+    replicas: 2
+    debug: true
+  prod:
+    db_host: prod-db.firma.local
+    replicas: 4
+    debug: false
