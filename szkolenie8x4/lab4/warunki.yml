@@ -1,0 +1,55 @@
+---
+# LAB 4 — Krok 3: warunki
+# Uruchomienie:
+#   ansible-playbook -i inventory/hosts.yml warunki.yml
+#
+# Uzupelnij miejsca oznaczone # TODO
+# Po uruchomieniu porownaj: ktore taski sa "skipped" na web01 (dev),
+# a ktore na web02 (prod) — i dlaczego?
+
+- name: Warunki w praktyce
+  hosts: all
+  become: true
+
+  tasks:
+
+    # GOTOWE — fakty, na ktorych bedziemy budowac warunki
+    - name: Przedstaw hosta
+      debug:
+        msg: >
+          {{ inventory_hostname }}:
+          {{ ansible_distribution }} {{ ansible_distribution_version }}
+          (rodzina: {{ ansible_os_family }}),
+          RAM: {{ ansible_memtotal_mb }} MB,
+          grupy: {{ group_names }}
+
+    - name: Katalog aplikacji (potrzebny dalej)
+      file:
+        path: "{{ app_katalog }}"
+        state: directory
+        mode: '0755'
+
+    - name: Zainstaluj ncdu (tylko rodzina Debian)
+      # TODO: Uzyj modulu apt (name: ncdu, state: present,
+      #       update_cache + cache_valid_time: 3600)
+      #       Warunek: rodzina systemu (fakt ansible_os_family) == "Debian"
+
+    - name: Komunikat trybu debug
+      # TODO: Uzyj modulu debug
+      #       msg: "UWAGA: {{ inventory_hostname }} dziala w trybie DEBUG"
+      #       Warunek: app_debug jest prawda
+      #       (pamietaj o | default(false) | bool)
+
+    - name: Oznacz serwer produkcyjny
+      # TODO: Uzyj modulu copy
+      #       content: "Serwer produkcyjny — zmiany tylko przez Ansible!\n"
+      #       dest: "{{ app_katalog }}/PRODUKCJA"
+      #       Warunek: host nalezy do grupy prod
+      #       (zmienna specjalna group_names; caly warunek w cudzyslowie!)
+
+    - name: Ostrzezenie — prod z malym zapasem RAM
+      # TODO: Uzyj modulu debug
+      #       msg: "UWAGA: produkcyjny {{ inventory_hostname }} ma tylko {{ ansible_memtotal_mb }} MB RAM"
+      #       Warunek jako LISTA (dziala jak AND):
+      #         - host w grupie prod
+      #         - ansible_memtotal_mb < 4096

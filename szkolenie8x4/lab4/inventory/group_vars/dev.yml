@@ -1,0 +1,6 @@
+---
+# Srodowisko deweloperskie — nadpisujemy tylko roznice wzgledem all.yml
+srodowisko: dev
+app_debug: true
+app_log_level: debug
+# app_replicas: 1  ← nie powtarzamy, taka wartosc jest juz w all.yml

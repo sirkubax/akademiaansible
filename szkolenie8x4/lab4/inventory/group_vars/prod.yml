@@ -1,0 +1,9 @@
+---
+# TODO: uzupelnij zmienne srodowiska PRODUKCYJNEGO (na wzor dev.yml):
+#
+#   srodowisko:     prod
+#   app_log_level:  warning
+#   app_replicas:   3
+#
+# UWAGA: app_debug ma zostac false — ta wartosc JUZ JEST w all.yml,
+#        wiec NIE powtarzamy jej tutaj (zasada najnizszego poziomu).

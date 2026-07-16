@@ -17,7 +17,7 @@
     - name: 1. Nazwa i wersja aplikacji
       debug:
         # TODO: uzyj aplikacja.nazwa oraz aplikacja.wersja
-        msg: "Aplikacja TODO w wersji TODO"
+        msg: "Aplikacja {{ aplikacja.nazwa }} w wersji {{ aplikacja.wersja }}"
 
     - name: 2. Drugi pakiet z listy
       debug:

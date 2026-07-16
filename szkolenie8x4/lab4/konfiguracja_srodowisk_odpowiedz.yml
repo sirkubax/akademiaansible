@@ -1,0 +1,37 @@
+---
+# LAB 4 — Krok 4: konfiguracja per srodowisko (ROZWIAZANIE)
+# Uruchomienie:
+#   ansible-playbook -i inventory/hosts.yml konfiguracja_srodowisk_odpowiedz.yml
+
+- name: Konfiguracja aplikacji per srodowisko
+  hosts: all
+  become: true
+
+  tasks:
+
+    - name: Katalog konfiguracji
+      file:
+        path: /etc/szkolenie
+        state: directory
+        mode: '0755'
+
+    - name: Wygeneruj konfiguracje srodowiskowa
+      template:
+        src: templates/app_env.conf.j2
+        dest: /etc/szkolenie/app_env.conf
+        mode: '0644'
+
+    - name: Wlacz flage backupu (tylko produkcja)
+      copy:
+        content: "backup=true\n"
+        dest: /etc/szkolenie/backup_enabled
+        mode: '0644'
+      when: "'prod' in group_names"
+
+    - name: Podsumowanie hosta
+      debug:
+        msg: >
+          {{ inventory_hostname }} → srodowisko: {{ srodowisko | default('BRAK — uzupelnij group_vars!') }},
+          log_level={{ app_log_level | default('info') }},
+          repliki={{ app_replicas }},
+          debug={{ app_debug }}

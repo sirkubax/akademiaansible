@@ -1,0 +1,7 @@
+---
+# ROZWIAZANIE — wzor dla prod.yml
+# (ten plik ma koncowke _odpowiedz, wiec NIE jest gruba w inventory;
+#  skopiuj zawartosc do prod.yml)
+srodowisko: prod
+app_log_level: warning
+app_replicas: 3

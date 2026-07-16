@@ -1,0 +1,45 @@
+---
+# LAB 4 — Krok 2: petle (ROZWIAZANIE)
+# Uruchomienie:
+#   ansible-playbook -i inventory/hosts.yml petle_odpowiedz.yml
+
+- name: Petle w praktyce
+  hosts: all
+  become: true
+
+  tasks:
+
+    - name: Stworz strukture katalogow aplikacji
+      file:
+        path: "{{ app_katalog }}/{{ item }}"
+        state: directory
+        mode: '0755'
+      loop: "{{ katalogi_aplikacji }}"
+
+    - name: Stworz uzytkownikow aplikacji (tylko aktywnych)
+      user:
+        name: "{{ item.name }}"
+        comment: "{{ item.comment }}"
+        shell: "{{ item.shell }}"
+        state: present
+      loop: "{{ uzytkownicy_aplikacji }}"
+      when: item.aktywny | bool
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Sprawdz obecnosc plikow konfiguracyjnych
+      stat:
+        path: "/etc/szkolenie/{{ item }}"
+      register: konfigi
+      loop:
+        - app.conf
+        - app_env.conf
+        - cache.conf
+
+    - name: Zglos brakujace pliki
+      debug:
+        msg: "BRAK pliku: {{ item.item }}"
+      loop: "{{ konfigi.results }}"
+      when: not item.stat.exists
+      loop_control:
+        label: "{{ item.item }}"

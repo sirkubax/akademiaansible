@@ -1,0 +1,8 @@
+# Zarzadzane przez Ansible — zmiany reczne zostana nadpisane!
+# Host: {{ inventory_hostname }} | srodowisko: {{ srodowisko | default('nieznane') }}
+
+app={{ app_name }}
+port={{ app_port }}
+log_level={{ app_log_level | default('info') }}
+debug={{ app_debug | ternary('true', 'false') }}
+replicas={{ app_replicas }}

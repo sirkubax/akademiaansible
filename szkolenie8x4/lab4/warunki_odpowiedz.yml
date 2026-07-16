@@ -1,0 +1,52 @@
+---
+# LAB 4 — Krok 3: warunki (ROZWIAZANIE)
+# Uruchomienie:
+#   ansible-playbook -i inventory/hosts.yml warunki_odpowiedz.yml
+
+- name: Warunki w praktyce
+  hosts: all
+  become: true
+
+  tasks:
+
+    - name: Przedstaw hosta
+      debug:
+        msg: >
+          {{ inventory_hostname }}:
+          {{ ansible_distribution }} {{ ansible_distribution_version }}
+          (rodzina: {{ ansible_os_family }}),
+          RAM: {{ ansible_memtotal_mb }} MB,
+          grupy: {{ group_names }}
+
+    - name: Katalog aplikacji (potrzebny dalej)
+      file:
+        path: "{{ app_katalog }}"
+        state: directory
+        mode: '0755'
+
+    - name: Zainstaluj ncdu (tylko rodzina Debian)
+      apt:
+        name: ncdu
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+      when: ansible_os_family == "Debian"
+
+    - name: Komunikat trybu debug
+      debug:
+        msg: "UWAGA: {{ inventory_hostname }} dziala w trybie DEBUG"
+      when: app_debug | default(false) | bool
+
+    - name: Oznacz serwer produkcyjny
+      copy:
+        content: "Serwer produkcyjny — zmiany tylko przez Ansible!\n"
+        dest: "{{ app_katalog }}/PRODUKCJA"
+        mode: '0644'
+      when: "'prod' in group_names"
+
+    - name: Ostrzezenie — prod z malym zapasem RAM
+      debug:
+        msg: "UWAGA: produkcyjny {{ inventory_hostname }} ma tylko {{ ansible_memtotal_mb }} MB RAM"
+      when:
+        - "'prod' in group_names"
+        - ansible_memtotal_mb < 4096

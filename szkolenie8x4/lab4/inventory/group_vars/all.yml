@@ -1,0 +1,30 @@
+---
+# Wspolne wartosci DOMYSLNE dla wszystkich srodowisk.
+# Srodowiska (dev.yml / prod.yml) nadpisuja tylko to, co u nich inne.
+
+app_name: sklep
+app_port: 8080
+app_debug: false
+app_log_level: info
+app_replicas: 1
+app_katalog: /opt/sklep
+
+katalogi_aplikacji:
+  - logs
+  - config
+  - data
+  - tmp
+
+uzytkownicy_aplikacji:
+  - name: deploy
+    comment: "Konto wdrozeniowe"
+    shell: /bin/bash
+    aktywny: true
+  - name: monitor
+    comment: "Konto monitoringu"
+    shell: /usr/sbin/nologin
+    aktywny: true
+  - name: stazysta
+    comment: "Konto stazysty (wylaczone)"
+    shell: /bin/bash
+    aktywny: false

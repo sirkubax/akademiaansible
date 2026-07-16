@@ -8,9 +8,8 @@
   become: true
 
   tasks:
-
     - name: Zainstaluj firmowy zestaw narzedzi
-      apt:
+      ansible.builtin.apt:
         name:
           - htop
           - vim
@@ -21,23 +20,23 @@
         cache_valid_time: 3600
 
     - name: Usun nano wraz z konfiguracja
-      apt:
+      ansible.builtin.apt:
         name: nano
         state: absent
         purge: true
         autoremove: true
 
     - name: Bezpieczna aktualizacja systemu
-      apt:
+      ansible.builtin.apt:
         upgrade: safe
 
     - name: Sprawdz czy system wymaga restartu
-      stat:
+      ansible.builtin.stat:
         path: /var/run/reboot-required
       register: reboot_required
 
     - name: Poinformuj o koniecznosci restartu
-      debug:
+      ansible.builtin.debug:
         msg: >
           UWAGA: {{ inventory_hostname }} wymaga restartu
           po aktualizacji (jadro/libc).

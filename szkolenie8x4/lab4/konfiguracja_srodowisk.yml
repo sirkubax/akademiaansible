@@ -1,0 +1,41 @@
+---
+# LAB 4 — Krok 4: konfiguracja per srodowisko
+# Uruchomienie:
+#   ansible-playbook -i inventory/hosts.yml konfiguracja_srodowisk.yml
+#
+# Uzupelnij miejsca oznaczone # TODO
+# Ten playbook jest WSPOLNY dla dev i prod — roznice pochodza
+# WYLACZNIE ze zmiennych w inventory/group_vars/.
+
+- name: Konfiguracja aplikacji per srodowisko
+  hosts: all
+  become: true
+
+  tasks:
+
+    - name: Katalog konfiguracji
+      file:
+        path: /etc/szkolenie
+        state: directory
+        mode: '0755'
+
+    - name: Wygeneruj konfiguracje srodowiskowa
+      # TODO: Uzyj modulu template
+      #       src: templates/app_env.conf.j2   (obejrzyj szablon!)
+      #       dest: /etc/szkolenie/app_env.conf
+      #       mode: '0644'
+
+    - name: Wlacz flage backupu (tylko produkcja)
+      # TODO: Uzyj modulu copy
+      #       content: "backup=true\n"
+      #       dest: /etc/szkolenie/backup_enabled
+      #       Warunek: host w grupie prod (group_names)
+
+    # GOTOWE — podsumowanie: te same zmienne, rozne wartosci per host
+    - name: Podsumowanie hosta
+      debug:
+        msg: >
+          {{ inventory_hostname }} → srodowisko: {{ srodowisko | default('BRAK — uzupelnij group_vars!') }},
+          log_level={{ app_log_level | default('info') }},
+          repliki={{ app_replicas }},
+          debug={{ app_debug }}
