@@ -1,0 +1,9 @@
+---
+# defaults/main.yml — PARAMETRY roli (publiczny interfejs).
+# Kazdy uzytkownik roli moze je nadpisac w group_vars / play vars / -e.
+#
+# TODO: zdefiniuj trzy zmienne domyslne (wszystkie z prefiksem roli!):
+#
+#   aplikacja_www_port:    80
+#   aplikacja_www_tytul:   "Aplikacja szkoleniowa"
+#   aplikacja_www_docroot: /var/www/html

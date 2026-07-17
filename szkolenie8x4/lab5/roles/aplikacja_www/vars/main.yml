@@ -1,0 +1,6 @@
+---
+# vars/main.yml — STALE WEWNETRZNE roli (wysoki priorytet, nie do nadpisania
+# z group_vars). Uzytkownik roli nie powinien tego zmieniac — to szczegoly
+# implementacji, nie parametry.
+aplikacja_www_pakiet: apache2
+aplikacja_www_usluga: apache2

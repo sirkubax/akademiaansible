@@ -1,0 +1,29 @@
+---
+# tasks/main.yml — punkt wejscia roli.
+# UWAGA: tu NIE MA naglowka play (hosts/become) — tylko lista taskow!
+# Piszemy pelnymi nazwami modulow (FQCN): ansible.builtin.*
+#
+# Uzupelnij miejsca oznaczone # TODO
+
+- name: Zainstaluj serwer www
+  # TODO: Uzyj modulu ansible.builtin.apt
+  #       Pakiet: "{{ aplikacja_www_pakiet }}"   (stala z vars/main.yml)
+  #       state: present, update_cache + cache_valid_time: 3600
+
+- name: Ustaw port nasluchu
+  # TODO: Uzyj modulu ansible.builtin.lineinfile
+  #       Plik: /etc/apache2/ports.conf
+  #       Znajdz linie:  '^Listen '
+  #       Zamien na:     "Listen {{ aplikacja_www_port }}"
+  #       Po zmianie powiadom handler: restart apache   (notify)
+
+- name: Wgraj strone glowna z szablonu
+  # TODO: Uzyj modulu ansible.builtin.template
+  #       src: index.html.j2        ← BEZ sciezki templates/ — rola sama wie!
+  #       dest: "{{ aplikacja_www_docroot }}/index.html"
+  #       mode: '0644'
+
+- name: Upewnij sie ze apache dziala i startuje z systemem
+  # TODO: Uzyj modulu ansible.builtin.service
+  #       Usluga: "{{ aplikacja_www_usluga }}"
+  #       state: started, enabled: true

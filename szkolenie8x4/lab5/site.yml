@@ -1,0 +1,17 @@
+---
+# LAB 5 — Krok 3: playbook uzywajacy roli
+# Uruchomienie:
+#   ansible-playbook -i inventory/hosts.yml site.yml
+#
+# Zauwaz jak KROTKI jest playbook, gdy logika mieszka w roli!
+
+- name: Wdrozenie aplikacji www przez role
+  hosts: webservers
+  become: true
+
+  # TODO: dodaj sekcje roles: z rola aplikacja_www
+  #
+  # Wariant rozszerzony (wyprobuj po podstawowym):
+  #   nadpisz parametr roli wprost w playbooku, np.
+  #   - { role: aplikacja_www, aplikacja_www_tytul: "Tytul z playbooka" }
+  #   Zastanow sie: co wygra — ten zapis czy group_vars/dev.yml?

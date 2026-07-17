@@ -1,0 +1,25 @@
+---
+# LAB 5 — Krok 7 (bonus): Apache przez gotowa role z Galaxy
+#
+# Najpierw zainstaluj role:  ansible-galaxy role install -r requirements.yml
+# Potem TYLKO symulacja:
+#   ansible-playbook -i inventory/hosts.yml site_galaxy.yml --check --diff
+# Na ostro — dopiero po analizie planu zmian (i zgodzie prowadzacego).
+#
+# Zmienne konfigurujace role znajdziesz w:
+#   ~/.ansible/roles/geerlingguy.apache/defaults/main.yml
+#   ~/.ansible/roles/geerlingguy.apache/README.md
+
+- name: Apache przez role geerlingguy.apache
+  hosts: webservers
+  become: true
+
+  vars:
+    apache_listen_port: 8082
+    apache_remove_default_vhost: true
+    apache_vhosts:
+      - servername: "sklep.szkolenie.local"
+        documentroot: "/var/www/html"
+
+  roles:
+    - geerlingguy.apache

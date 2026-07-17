@@ -1,0 +1,13 @@
+---
+# LAB 5 — zaleznosci projektu (Czesc B)
+# Instalacja:
+#   ansible-galaxy role install -r requirements.yml
+#   ansible-galaxy collection install -r requirements.yml
+
+roles:
+  - name: geerlingguy.apache
+    version: "3.2.0"          # zawsze pinujemy wersje!
+
+collections:
+  - name: community.general
+    version: ">=9.0.0,<11.0.0"

@@ -1,0 +1,21 @@
+---
+# LAB 5 — Krok 3: playbook uzywajacy roli (ROZWIAZANIE)
+# Uruchomienie:
+#   ansible-playbook -i inventory/hosts.yml site_odpowiedz.yml
+#
+# Uzywa roli aplikacja_www_odpowiedz (kompletnej), zeby dzialac
+# niezaleznie od Twojej pracy w Czesci A. W Twoim site.yml
+# uzyj oczywiscie roli: aplikacja_www
+
+- name: Wdrozenie aplikacji www przez role
+  hosts: webservers
+  become: true
+
+  roles:
+    - aplikacja_www_odpowiedz
+
+# Odpowiedz do wariantu rozszerzonego:
+#   - { role: aplikacja_www, aplikacja_www_tytul: "Tytul z playbooka" }
+#   Parametr roli podany w playbooku (poziom "vars playa/roli") wygrywa
+#   z group_vars — dlatego parametry per srodowisko lepiej trzymac
+#   w group_vars, a w playbooku nadpisywac tylko swiadomie.

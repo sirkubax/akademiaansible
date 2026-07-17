@@ -1,0 +1,4 @@
+---
+# Stale wewnetrzne roli — szczegoly implementacji
+aplikacja_www_pakiet: apache2
+aplikacja_www_usluga: apache2

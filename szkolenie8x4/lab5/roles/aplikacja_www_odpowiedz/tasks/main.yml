@@ -1,0 +1,26 @@
+---
+- name: Zainstaluj serwer www
+  ansible.builtin.apt:
+    name: "{{ aplikacja_www_pakiet }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Ustaw port nasluchu
+  ansible.builtin.lineinfile:
+    path: /etc/apache2/ports.conf
+    regexp: '^Listen '
+    line: "Listen {{ aplikacja_www_port }}"
+  notify: restart apache
+
+- name: Wgraj strone glowna z szablonu
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: "{{ aplikacja_www_docroot }}/index.html"
+    mode: '0644'
+
+- name: Upewnij sie ze apache dziala i startuje z systemem
+  ansible.builtin.service:
+    name: "{{ aplikacja_www_usluga }}"
+    state: started
+    enabled: true

@@ -1,0 +1,17 @@
+<!-- Zarzadzane przez Ansible (rola: aplikacja_www) — zmiany reczne znikna! -->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <title>{{ aplikacja_www_tytul }}</title>
+</head>
+<body>
+  <h1>{{ aplikacja_www_tytul }}</h1>
+  <ul>
+    <li>Host: {{ inventory_hostname }} ({{ ansible_default_ipv4.address }})</li>
+    <li>Srodowisko: {{ srodowisko | default('nieznane') }}</li>
+    <li>Port: {{ aplikacja_www_port }}</li>
+    <li>System: {{ ansible_distribution }} {{ ansible_distribution_version }}</li>
+  </ul>
+</body>
+</html>

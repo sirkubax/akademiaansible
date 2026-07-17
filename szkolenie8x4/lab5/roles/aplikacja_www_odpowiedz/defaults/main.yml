@@ -1,0 +1,5 @@
+---
+# Parametry roli — publiczny interfejs (latwo nadpisac)
+aplikacja_www_port: 80
+aplikacja_www_tytul: "Aplikacja szkoleniowa"
+aplikacja_www_docroot: /var/www/html

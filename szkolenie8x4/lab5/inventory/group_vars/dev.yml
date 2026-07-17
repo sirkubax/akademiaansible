@@ -1,0 +1,9 @@
+---
+srodowisko: dev
+
+# Nadpisujemy DEFAULTS roli aplikacja_www — group_vars wygrywa
+# z defaults/main.yml (precedence, spotkanie 4!)
+aplikacja_www_tytul: "Sklep — wersja DEV (nie klikac na powaznie)"
+
+# Krok 4 labu — odkomentuj, uruchom playbook i obserwuj handler:
+# aplikacja_www_port: 8081
