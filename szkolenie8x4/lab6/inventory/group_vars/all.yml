@@ -1,0 +1,19 @@
+---
+# Wspolne zmienne calego projektu — jedno zrodlo prawdy dla 3 warstw.
+
+# --- Aplikacja ---
+app_nazwa: "Sklep — projekt szkoleniowy"
+app_port: 8080
+app_katalog: /var/www/aplikacja
+app_venv: /var/www/aplikacja/venv
+app_log_dir: /var/log/aplikacja
+
+# --- Load balancer ---
+lb_port: 80
+
+# --- Baza danych (uzywane przez app, lb NIE; przez role mysql — patrz databases.yml) ---
+db_nazwa: sklep_db
+db_user: sklep
+# UWAGA: haslo jawnym tekstem — TYLKO na potrzeby tego cwiczenia.
+#        Na spotkaniu 7 przeniesiemy je do ansible-vault (zmienna zostaje ta sama).
+db_haslo: "Szkolenie123!"

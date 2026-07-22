@@ -1,0 +1,40 @@
+---
+# PRZYKLAD dynamicznego inventory AWS (do CZYTANIA — nie uruchamiamy w labie,
+# wymaga kolekcji amazon.aws + poswiadczen AWS).
+#
+# Uzycie w realnym projekcie:
+#   ansible-galaxy collection install amazon.aws
+#   ansible-inventory -i inventory_aws_ec2.yml --graph
+#
+# Plik MUSI konczyc sie na "aws_ec2.yml" / "aws_ec2.yaml", zeby wtyczka go
+# rozpoznala.
+
+plugin: amazon.aws.aws_ec2
+
+regions:
+  - eu-west-2
+
+# Zawez do konkretnych hostow po tagach/stanie
+filters:
+  tag:Environment: prod
+  instance-state-name: running
+
+# Grupy TWORZA SIE SAME z metadanych EC2
+keyed_groups:
+  - prefix: tag                 # tag Role=apache → grupa tag_Role_apache
+    key: tags
+  - prefix: instance_type       # t3.micro → grupa instance_type_t3_micro
+    key: instance_type
+  - prefix: aws_region          # → grupa aws_region_eu_west_2
+    key: placement.region
+
+# Nazwa hosta w inventory (inventory_hostname)
+hostnames:
+  - tag:Name
+  - private-ip-address
+
+# ansible_host bez zmiany inventory_hostname
+compose:
+  ansible_host: private_ip_address
+
+strict_permissions: false

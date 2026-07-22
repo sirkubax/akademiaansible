@@ -1,0 +1,16 @@
+---
+# Statyczna czesc inventory hybrydowego — hosty "on-prem" wpisane recznie.
+# Lezy w KATALOGU inventory/ obok skryptu dynamicznego (02-dynamic.py).
+# Ansible scali oba zrodla: ansible-inventory -i inventory/ --graph
+
+all:
+  children:
+    statyczne:
+      hosts:
+        localhost:
+          ansible_connection: local
+        serwer-onprem-01:
+          ansible_host: 127.0.0.1
+          ansible_connection: local
+        # TODO (Krok 3): dopisz drugi host statyczny "serwer-onprem-02"
+        #                (ansible_host: 127.0.0.1, ansible_connection: local)

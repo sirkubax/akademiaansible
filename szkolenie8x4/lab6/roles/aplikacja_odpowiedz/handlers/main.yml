@@ -1,0 +1,16 @@
+---
+# Handler restartuje apache, a nastepnie CZEKA az usluga realnie nasluchuje.
+# Dzieki temu kolejny play (load balancer) nie dostanie wstajacego backendu.
+- name: restart apache
+  ansible.builtin.service:
+    name: apache2
+    state: restarted
+  notify: czekaj na port aplikacji
+
+- name: czekaj na port aplikacji
+  ansible.builtin.wait_for:
+    host: 127.0.0.1
+    port: "{{ app_port }}"
+    state: started
+    timeout: 20
+    delay: 2

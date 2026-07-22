@@ -1,0 +1,35 @@
+---
+# Rola loadbalancer (ROZWIAZANIE) — nginx rozkladajacy ruch na serwery aplikacji.
+
+- name: Zainstaluj nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Wgraj konfiguracje load balancera
+  ansible.builtin.template:
+    src: upstream.conf.j2
+    dest: /etc/nginx/sites-available/aplikacja
+    mode: '0644'
+  notify: restart nginx
+
+- name: Aktywuj konfiguracje (symlink do sites-enabled)
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/aplikacja
+    dest: /etc/nginx/sites-enabled/aplikacja
+    state: link
+  notify: restart nginx
+
+- name: Usun domyslny vhost nginx
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: restart nginx
+
+- name: Upewnij sie ze nginx dziala i startuje z systemem
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true

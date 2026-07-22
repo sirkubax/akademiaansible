@@ -1,0 +1,70 @@
+---
+# LAB 8 — Czesc C: orkiestracja Windows (do CZYTANIA — nie uruchamiamy).
+# Wymaga: host Windows z wlaczonym WinRM + kolekcja ansible.windows.
+#   ansible-galaxy collection install ansible.windows community.windows
+#
+# Polaczenie (w inventory) — Windows uzywa WinRM, nie SSH:
+#   windows:
+#     hosts: { win01: { ansible_host: 10.0.0.50 } }
+#     vars:
+#       ansible_connection: winrm
+#       ansible_user: Administrator
+#       ansible_password: "{{ vault_win_haslo }}"     # vault!
+#       ansible_winrm_transport: ntlm
+#       ansible_port: 5986
+#
+# Wzorzec zaczerpniety z playbooks/win.yml w tym repozytorium.
+
+- name: Konfiguracja hosta Windows
+  hosts: windows
+  gather_facts: true             # fakty tez dzialaja na Windows
+
+  tasks:
+
+    - name: Zainstaluj 7-Zip przez Chocolatey (idempotentnie)
+      ansible.windows.win_chocolatey:
+        name: 7zip
+        state: present
+
+    - name: Utworz katalog
+      ansible.windows.win_file:
+        path: C:\temp\aplikacja
+        state: directory
+
+    - name: Wgraj plik konfiguracyjny z szablonu
+      ansible.windows.win_template:
+        src: app.conf.j2
+        dest: C:\temp\aplikacja\app.conf
+
+    - name: Upewnij sie, ze usluga dziala i startuje z systemem
+      ansible.windows.win_service:
+        name: Spooler
+        state: started
+        start_mode: auto
+
+    - name: Komendy PowerShell (gdy nie ma dedykowanego modulu)
+      ansible.windows.win_shell: |
+        Get-Service -Name Spooler | Select-Object Status, Name
+
+    - name: Utworz uzytkownika lokalnego
+      ansible.windows.win_user:
+        name: deploy
+        password: "{{ vault_win_haslo }}"
+        groups:
+          - Users
+        state: present
+
+    - name: Zainstaluj aktualizacje Windows (kategorie bezpieczenstwa)
+      ansible.windows.win_updates:
+        category_names:
+          - SecurityUpdates
+          - CriticalUpdates
+        reboot: true             # zrestartuj, jesli aktualizacja tego wymaga
+
+# Odpowiedniosci Linux → Windows (ta sama filozofia idempotentnych modulow):
+#   apt/dnf        → win_chocolatey / win_package
+#   file           → win_file
+#   template/copy  → win_template / win_copy
+#   service        → win_service
+#   user           → win_user
+#   command/shell  → win_command / win_shell (PowerShell)

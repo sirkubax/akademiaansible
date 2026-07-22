@@ -1,0 +1,5 @@
+---
+# Zmienne wspolne dla CALEGO inventory hybrydowego (statyczne + dynamiczne).
+# Katalog group_vars/ obok plikow inventory jest ladowany automatycznie.
+srodowisko_labu: szkolenie8x4
+opis: "Inventory hybrydowe: plik statyczny + skrypt dynamiczny"

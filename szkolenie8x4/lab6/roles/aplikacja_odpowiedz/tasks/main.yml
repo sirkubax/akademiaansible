@@ -1,0 +1,94 @@
+---
+# Rola aplikacja (ROZWIAZANIE) — apache + mod_wsgi + Flask.
+
+- name: Zainstaluj pakiety serwera aplikacji
+  ansible.builtin.apt:
+    name: "{{ app_pakiety }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Utworz katalog aplikacji
+  ansible.builtin.file:
+    path: "{{ app_katalog }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+- name: Utworz katalog na logi
+  ansible.builtin.file:
+    path: "{{ app_log_dir }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+- name: Wgraj kod aplikacji (Flask)
+  ansible.builtin.template:
+    src: app.py.j2
+    dest: "{{ app_katalog }}/app.py"
+    mode: '0644'
+  notify: restart apache
+
+- name: Wgraj punkt wejscia WSGI
+  ansible.builtin.template:
+    src: wsgi.py.j2
+    dest: "{{ app_katalog }}/wsgi.py"
+    mode: '0644'
+  notify: restart apache
+
+- name: Wgraj konfiguracje aplikacji (adres bazy)
+  ansible.builtin.template:
+    src: config.py.j2
+    dest: "{{ app_katalog }}/config.py"
+    mode: '0644'
+  notify: restart apache
+
+- name: Utworz virtualenv i zainstaluj zaleznosci Pythona
+  ansible.builtin.pip:
+    name:
+      - Flask
+      - PyMySQL
+    virtualenv: "{{ app_venv }}"
+    virtualenv_command: python3 -m venv
+
+- name: Ustaw wlasciciela virtualenv
+  ansible.builtin.file:
+    path: "{{ app_venv }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    recurse: true
+
+- name: Skonfiguruj port nasluchu apache (tylko app_port)
+  ansible.builtin.template:
+    src: ports.conf.j2
+    dest: /etc/apache2/ports.conf
+    mode: '0644'
+  notify: restart apache
+
+- name: Wgraj virtualhost aplikacji
+  ansible.builtin.template:
+    src: vhost.conf.j2
+    dest: /etc/apache2/sites-available/aplikacja.conf
+    mode: '0644'
+  notify: restart apache
+
+- name: Wlacz virtualhost aplikacji
+  ansible.builtin.command: a2ensite aplikacja
+  args:
+    creates: /etc/apache2/sites-enabled/aplikacja.conf
+  notify: restart apache
+
+- name: Wylacz domyslny virtualhost apache
+  ansible.builtin.command: a2dissite 000-default
+  args:
+    removes: /etc/apache2/sites-enabled/000-default.conf
+  notify: restart apache
+
+- name: Upewnij sie ze apache dziala i startuje z systemem
+  ansible.builtin.service:
+    name: apache2
+    state: started
+    enabled: true

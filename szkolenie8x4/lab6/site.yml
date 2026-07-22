@@ -1,0 +1,36 @@
+---
+# LAB 6 — site.yml: JEDEN playbook stawiajacy CALE srodowisko.
+# Uruchomienie:
+#   ansible-playbook -i inventory/hosts.yml site.yml
+#
+# Uzupelnij miejsca oznaczone # TODO.
+#
+# KLUCZOWA DECYZJA: kolejnosc play. Warstwy maja zaleznosci:
+#   baza  →  aplikacja (laczy sie z baza)  →  load balancer (nad aplikacjami)
+# Ulozenie play w zlej kolejnosci = aplikacja bez bazy / LB bez backendow.
+
+# ─────────────────────────────────────────────────────────────
+# TODO PLAY 1 — warstwa BAZY DANYCH
+#   hosts: databases
+#   become: true
+#   roles:
+#     - geerlingguy.mysql
+# ─────────────────────────────────────────────────────────────
+
+
+# ─────────────────────────────────────────────────────────────
+# TODO PLAY 2 — warstwa APLIKACJI
+#   hosts: appservers
+#   become: true
+#   roles:
+#     - aplikacja
+# ─────────────────────────────────────────────────────────────
+
+
+# ─────────────────────────────────────────────────────────────
+# TODO PLAY 3 — warstwa LOAD BALANCERA
+#   hosts: loadbalancers
+#   become: true
+#   roles:
+#     - loadbalancer
+# ─────────────────────────────────────────────────────────────

@@ -1,0 +1,41 @@
+---
+# LAB 7 — Czesc C: debugging.
+# Ten playbook ma 3 ZASIANE bledy. Uruchom, znajdz przyczyne, napraw.
+# Debuguj iteracyjnie: napraw pierwszy blad, uruchom ponownie, napraw kolejny.
+#
+#   ansible-playbook debuguj.yml
+#   ansible-playbook debuguj.yml -vvv        # wiecej szczegolow
+#
+# Podpowiedzi w README (Krok 8). Rozwiazanie: debuguj_odpowiedz.yml
+
+- name: Debugging — znajdz i napraw 3 bledy
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    server_port: 8080          # uwaga na nazwe tej zmiennej...
+    wlacz_debug: "false"       # ...i na TYP tej wartosci
+    aplikacje: [nginx, postgres]
+
+  tasks:
+
+    # --- BLAD 1 ---
+    - name: Pokaz port serwera
+      ansible.builtin.debug:
+        msg: "Serwer slucha na porcie {{ serwer_port }}"
+
+    # --- BLAD 2 ---
+    - name: Zadanie tylko w trybie debug
+      ansible.builtin.debug:
+        msg: "!! TRYB DEBUG AKTYWNY !! (to NIE powinno sie pojawic, gdy wlacz_debug=false)"
+      when: wlacz_debug
+
+    # --- BLAD 3 ---
+    - name: Policz nieistniejace procesy (grep bez trafien zwraca rc=1)
+      ansible.builtin.shell: "ps aux | grep -c '[n]ieistniejacy_proces_xyz'"
+      register: liczba
+
+    - name: Pokaz wynik
+      ansible.builtin.debug:
+        msg: "Znaleziono pasujacych procesow: {{ liczba.stdout }}"

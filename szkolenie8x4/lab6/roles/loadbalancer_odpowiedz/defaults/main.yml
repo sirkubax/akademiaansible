@@ -1,0 +1,3 @@
+---
+# Fallback — group_vars/all.yml nadpisuje w projekcie.
+lb_port: 80

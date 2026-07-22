@@ -1,0 +1,7 @@
+---
+# Fallbacki roli — group_vars/all.yml nadpisuje te wartosci w projekcie.
+app_nazwa: "Aplikacja"
+app_port: 8080
+app_katalog: /var/www/aplikacja
+app_venv: /var/www/aplikacja/venv
+app_log_dir: /var/log/aplikacja

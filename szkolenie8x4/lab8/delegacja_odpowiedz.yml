@@ -1,0 +1,56 @@
+---
+# LAB 8 — Czesc B: delegowanie i powtarzanie (ROZWIAZANIE)
+#   ansible-playbook -i inventory/hosts.yml delegacja_odpowiedz.yml
+
+- name: Ciekawostki — delegacja i powtarzanie
+  hosts: appservers
+  gather_facts: false
+
+  vars:
+    katalog: /tmp/szkolenie8x4
+
+  tasks:
+
+    - name: Katalog roboczy (na kazdym hoscie)
+      ansible.builtin.file:
+        path: "{{ katalog }}"
+        state: directory
+        mode: '0755'
+
+    - name: Migracja bazy — TYLKO RAZ (nie z kazdego app-hosta)
+      ansible.builtin.debug:
+        msg: "Migracja uruchomiona jeden raz, z hosta {{ inventory_hostname }}"
+      run_once: true
+      delegate_to: "{{ groups['appservers'][0] }}"
+
+    - name: Zarejestruj host w (udawanym) monitoringu — z CONTROL NODE
+      ansible.builtin.copy:
+        content: "zarejestrowano {{ inventory_hostname }}\n"
+        dest: "{{ katalog }}/monitoring_{{ inventory_hostname }}.txt"
+        mode: '0644'
+      delegate_to: localhost
+
+    - name: Zresetuj licznik prob (raz)
+      ansible.builtin.copy:
+        content: "0"
+        dest: "{{ katalog }}/licznik"
+        mode: '0644'
+      run_once: true
+      delegate_to: localhost
+
+    - name: until — udaje sie dopiero za 3. razem
+      ansible.builtin.shell: |
+        f={{ katalog }}/licznik
+        n=$(cat "$f" 2>/dev/null || echo 0); n=$((n+1)); echo "$n" > "$f"; echo "$n"
+      register: proba
+      until: proba.stdout | int >= 3
+      retries: 5
+      delay: 1
+      run_once: true
+      delegate_to: localhost
+      changed_when: false
+
+    - name: Pokaz, po ilu probach sie udalo
+      ansible.builtin.debug:
+        msg: "Sukces przy wartosci licznika = {{ proba.stdout }}"
+      run_once: true

@@ -1,0 +1,24 @@
+---
+# Zmienne warstwy BAZY DANYCH — steruja rola geerlingguy.mysql.
+# Ten plik jest GOTOWY. Przeczytaj go i zrozum, jak zmienne z all.yml
+# (db_nazwa / db_user / db_haslo) zasilaja konfiguracje roli z Galaxy.
+
+# Nasluchuj tez na sieci (nie tylko 127.0.0.1) — inaczej serwery aplikacji
+# na innych hostach nie polacza sie z baza.
+mysql_bind_address: "0.0.0.0"
+
+# Haslo roota MySQL (w produkcji: vault!)
+mysql_root_password: "RootSzkolenie123!"
+
+# Bazy do utworzenia
+mysql_databases:
+  - name: "{{ db_nazwa }}"
+    encoding: utf8mb4
+    collation: utf8mb4_unicode_ci
+
+# Uzytkownicy aplikacji — host '%' pozwala laczyc sie z innych maszyn
+mysql_users:
+  - name: "{{ db_user }}"
+    password: "{{ db_haslo }}"
+    priv: "{{ db_nazwa }}.*:ALL"
+    host: "%"

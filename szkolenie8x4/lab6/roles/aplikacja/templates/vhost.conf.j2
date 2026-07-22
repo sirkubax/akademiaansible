@@ -1,0 +1,15 @@
+# Wygenerowano przez Ansible — rola: aplikacja
+<VirtualHost *:{{ app_port }}>
+    ServerName {{ inventory_hostname }}
+
+    WSGIDaemonProcess aplikacja user=www-data group=www-data threads=5 python-home={{ app_venv }}
+    WSGIProcessGroup aplikacja
+    WSGIScriptAlias / {{ app_katalog }}/wsgi.py
+
+    <Directory {{ app_katalog }}>
+        Require all granted
+    </Directory>
+
+    ErrorLog {{ app_log_dir }}/error.log
+    CustomLog {{ app_log_dir }}/access.log combined
+</VirtualHost>

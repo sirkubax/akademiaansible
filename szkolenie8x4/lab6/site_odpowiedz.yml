@@ -1,0 +1,28 @@
+---
+# LAB 6 — site.yml (ROZWIAZANIE)
+# Uruchomienie:
+#   ansible-playbook -i inventory/hosts.yml site_odpowiedz.yml
+#
+# Uzywa rol *_odpowiedz (kompletnych), wiec dziala niezaleznie od Twojej
+# pracy w rolach aplikacja/loadbalancer. Rola bazy jest ta sama (Galaxy).
+
+# 1. NAJPIERW baza — aplikacja musi miec sie z czym polaczyc
+- name: Warstwa bazy danych
+  hosts: databases
+  become: true
+  roles:
+    - geerlingguy.mysql
+
+# 2. POTEM aplikacja — laczy sie z gotowa baza
+- name: Warstwa aplikacji
+  hosts: appservers
+  become: true
+  roles:
+    - aplikacja_odpowiedz
+
+# 3. NA KONIEC load balancer — potrzebuje listy dzialajacych serwerow app
+- name: Warstwa load balancera
+  hosts: loadbalancers
+  become: true
+  roles:
+    - loadbalancer_odpowiedz

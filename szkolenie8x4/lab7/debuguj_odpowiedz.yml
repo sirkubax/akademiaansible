@@ -1,0 +1,47 @@
+---
+# LAB 7 — Czesc C: debugging (ROZWIAZANIE, z komentarzami).
+#   ansible-playbook debuguj_odpowiedz.yml
+
+- name: Debugging — 3 bledy naprawione
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    server_port: 8080
+    wlacz_debug: "false"
+    aplikacje: [nginx, postgres]
+
+  tasks:
+
+    # --- BLAD 1: undefined variable ---
+    # Zmienna nazywa sie server_port, a task odwolywal sie do serwer_port
+    # (literowka). Ansible: "'serwer_port' is undefined".
+    # Naprawa: uzgodnij nazwe.
+    - name: Pokaz port serwera
+      ansible.builtin.debug:
+        msg: "Serwer slucha na porcie {{ server_port }}"
+
+    # --- BLAD 2: pulapka bool ---
+    # wlacz_debug to STRING "false" — niepusty string jest truthy,
+    # wiec task wykonywal sie mimo "false".
+    # Naprawa: jawna konwersja | bool.
+    - name: Zadanie tylko w trybie debug
+      ansible.builtin.debug:
+        msg: "!! TRYB DEBUG AKTYWNY !!"
+      when: wlacz_debug | bool
+
+    # --- BLAD 3: command/rc ---
+    # grep -c bez trafien wypisuje 0 i konczy sie rc=1 → Ansible uznaje
+    # task za 'failed'. To dla nas normalny wynik (zero procesow).
+    # Naprawa: failed_when: false (rc!=0 to nie blad) + changed_when: false
+    # (odczyt niczego nie zmienia na hoscie).
+    - name: Policz nieistniejace procesy (grep bez trafien zwraca rc=1)
+      ansible.builtin.shell: "ps aux | grep -c '[n]ieistniejacy_proces_xyz'"
+      register: liczba
+      failed_when: false
+      changed_when: false
+
+    - name: Pokaz wynik
+      ansible.builtin.debug:
+        msg: "Znaleziono pasujacych procesow: {{ liczba.stdout }}"

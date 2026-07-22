@@ -1,0 +1,14 @@
+# Wygenerowano przez Ansible — rola: loadbalancer (ROZWIAZANIE)
+upstream aplikacja_backend {
+{% for h in groups['appservers'] %}
+    server {{ hostvars[h].ansible_default_ipv4.address }}:{{ app_port }};
+{% endfor %}
+}
+
+server {
+    listen {{ lb_port }} default_server;
+
+    location / {
+        proxy_pass http://aplikacja_backend;
+    }
+}

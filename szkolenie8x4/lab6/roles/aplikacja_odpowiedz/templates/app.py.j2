@@ -1,0 +1,29 @@
+# Wygenerowano przez Ansible — rola: aplikacja (material szkoleniowy)
+import socket
+import config
+from flask import Flask
+
+app = Flask(__name__)
+
+
+@app.route("/")
+def index():
+    host = socket.gethostname()
+    try:
+        import pymysql
+        polaczenie = pymysql.connect(
+            host=config.DB_HOST,
+            user=config.DB_USER,
+            password=config.DB_PASS,
+            database=config.DB_NAME,
+            connect_timeout=3,
+        )
+        polaczenie.close()
+        baza = "connected to " + config.DB_HOST
+    except Exception as blad:
+        baza = "ERROR: " + str(blad)
+    return (
+        "<h1>{{ app_nazwa }}</h1>"
+        "<p>Serwer aplikacji: " + host + "</p>"
+        "<p>Baza: " + baza + "</p>"
+    )

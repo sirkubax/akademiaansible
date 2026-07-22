@@ -1,0 +1,19 @@
+# Wygenerowano przez Ansible — rola: loadbalancer
+upstream aplikacja_backend {
+{# TODO: petla po hostach grupy 'appservers'.
+   Dla KAZDEGO hosta wypisz linie:
+       server <ADRES_IP>:<PORT_APLIKACJI>;
+   Adres IP:  hostvars[h].ansible_default_ipv4.address
+   Port:      app_port
+   Skladnia petli:  {% raw %}{% for h in groups['appservers'] %} ... {% endfor %}{% endraw %}
+#}
+    server TODO:TODO;
+}
+
+server {
+    listen {{ lb_port }} default_server;
+
+    location / {
+        proxy_pass http://aplikacja_backend;
+    }
+}

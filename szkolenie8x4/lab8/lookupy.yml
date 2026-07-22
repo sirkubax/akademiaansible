@@ -1,0 +1,61 @@
+---
+# LAB 8 — Czesc A: lookupy.
+# WAZNE: lookupy wykonuja sie na CONTROL NODE (Twoja maszyna), nie na hostach.
+# Uruchomienie:
+#   ansible-playbook lookupy.yml
+#
+# Uzupelnij miejsca oznaczone # TODO.
+
+- name: Ciekawostki — lookupy
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    katalog: /tmp/szkolenie8x4
+
+  tasks:
+
+    - name: Katalog roboczy
+      ansible.builtin.file:
+        path: "{{ katalog }}"
+        state: directory
+        mode: '0755'
+
+    # --- GOTOWE: env ---
+    - name: env — zmienna srodowiskowa control node
+      ansible.builtin.debug:
+        msg: "HOME = {{ lookup('env', 'HOME') }}"
+
+    # --- GOTOWE: pipe ---
+    - name: pipe — STDOUT lokalnej komendy
+      ansible.builtin.debug:
+        msg: "Data: {{ lookup('pipe', 'date +%Y-%m-%d') }}"
+
+    - name: Przygotuj plik do odczytu
+      ansible.builtin.copy:
+        content: "wersja=1.4.2\n"
+        dest: "{{ katalog }}/app.version"
+        mode: '0644'
+
+    - name: file — odczyt pliku Z CONTROL NODE
+      # TODO: uzyj lookup('file', ...) do odczytu pliku {{ katalog }}/app.version
+      ansible.builtin.debug:
+        msg: "Zawartosc app.version: TODO"
+
+    - name: password — wygeneruj i zapamietaj haslo
+      # TODO: uzyj lookup('password', ...) — wygeneruj haslo o dlugosci 16
+      #   Argument: "{{ katalog }}/sekret.txt length=16 chars=ascii_letters,digits"
+      #   (lookup password ZAPISUJE haslo do pliku i zwraca je; drugi run = to samo)
+      ansible.builtin.debug:
+        msg: "Wygenerowane haslo: TODO"
+
+    - name: first_found — pierwszy istniejacy plik z listy
+      # TODO: uzyj lookup('first_found', kandydaci)
+      ansible.builtin.debug:
+        msg: "Uzyje pliku: TODO"
+      vars:
+        kandydaci:
+          - "{{ katalog }}/nie-istnieje.conf"
+          - "{{ katalog }}/app.version"
+          - "/etc/hostname"

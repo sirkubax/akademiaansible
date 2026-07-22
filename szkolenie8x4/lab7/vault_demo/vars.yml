@@ -1,0 +1,13 @@
+---
+# Zmienne JAWNE (mozna je code-review'owac bez odszyfrowywania).
+# Sekrety to WSKAZNIKI na zmienne z vault.yml (konwencja: prefiks vault_).
+db_user: sklep
+db_haslo: "{{ vault_db_haslo }}"
+
+# TODO (Krok 7 — encrypt_string):
+#   1) wygeneruj zaszyfrowany blok jednej wartosci:
+#        ansible-vault encrypt_string 'super-tajny-klucz-api' --name 'vault_api_klucz'
+#      (haslo vaulta: patrz README)
+#   2) wklej wynikowy blok  vault_api_klucz: !vault | ...  do pliku vault.yml
+#   3) odkomentuj ponizsza linie i ponownie uruchom czytaj_sekret.yml
+# api_klucz: "{{ vault_api_klucz }}"

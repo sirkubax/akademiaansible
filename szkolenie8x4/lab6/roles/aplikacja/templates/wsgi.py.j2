@@ -1,0 +1,4 @@
+# Punkt wejscia dla mod_wsgi. venv obslugiwany przez WSGIDaemonProcess python-home.
+import sys
+sys.path.insert(0, "{{ app_katalog }}")
+from app import app as application

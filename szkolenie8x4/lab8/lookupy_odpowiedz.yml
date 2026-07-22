@@ -1,0 +1,55 @@
+---
+# LAB 8 — Czesc A: lookupy (ROZWIAZANIE)
+#   ansible-playbook lookupy_odpowiedz.yml
+
+- name: Ciekawostki — lookupy
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    katalog: /tmp/szkolenie8x4
+
+  tasks:
+
+    - name: Katalog roboczy
+      ansible.builtin.file:
+        path: "{{ katalog }}"
+        state: directory
+        mode: '0755'
+
+    - name: env — zmienna srodowiskowa control node
+      ansible.builtin.debug:
+        msg: "HOME = {{ lookup('env', 'HOME') }}"
+
+    - name: pipe — STDOUT lokalnej komendy
+      ansible.builtin.debug:
+        msg: "Data: {{ lookup('pipe', 'date +%Y-%m-%d') }}"
+
+    - name: Przygotuj plik do odczytu
+      ansible.builtin.copy:
+        content: "wersja=1.4.2\n"
+        dest: "{{ katalog }}/app.version"
+        mode: '0644'
+
+    - name: file — odczyt pliku Z CONTROL NODE
+      ansible.builtin.debug:
+        msg: "Zawartosc app.version: {{ lookup('file', katalog ~ '/app.version') }}"
+
+    - name: password — wygeneruj i zapamietaj haslo
+      ansible.builtin.debug:
+        msg: "Wygenerowane haslo: {{ lookup('password', katalog ~ '/sekret.txt length=16 chars=ascii_letters,digits') }}"
+
+    - name: first_found — pierwszy istniejacy plik z listy
+      ansible.builtin.debug:
+        msg: "Uzyje pliku: {{ lookup('first_found', kandydaci) }}"
+      vars:
+        kandydaci:
+          - "{{ katalog }}/nie-istnieje.conf"
+          - "{{ katalog }}/app.version"
+          - "/etc/hostname"
+
+    - name: BONUS — query zwraca LISTE (do loop), lookup zwrocilby string
+      ansible.builtin.debug:
+        msg: "pakiet: {{ item }}"
+      loop: "{{ query('lines', 'printf \"nginx\\npostgres\\nredis\\n\"') }}"

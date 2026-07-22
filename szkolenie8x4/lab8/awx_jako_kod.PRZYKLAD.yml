@@ -1,0 +1,70 @@
+---
+# LAB 8 — Czesc C: AWX jako kod (do CZYTANIA — nie uruchamiamy).
+# Wymaga: dzialajacy AWX/AAP + kolekcja awx.awx + token API.
+#   ansible-galaxy collection install awx.awx
+#
+# Ten playbook konfiguruje SAM AWX (project, credential, inventory, job template)
+# — czyli "przycisk", ktory potem operator klika w interfejsie web.
+# Wzorzec zaczerpniety z playbooks/towerjob.yml w tym repozytorium.
+
+- name: Skonfiguruj AWX jako kod
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    awx_url: "https://awx.firma.local"
+    awx_token: "{{ vault_awx_token }}"        # sekret w vault (spotkanie 7!)
+
+  module_defaults:
+    group/awx.awx.controller:                 # wspolne dla wszystkich modulow awx
+      controller_host: "{{ awx_url }}"
+      controller_oauthtoken: "{{ awx_token }}"
+      validate_certs: false
+
+  tasks:
+
+    - name: Poswiadczenie SSH (Credential) — operator go UZYWA, nie widzi hasla
+      awx.awx.credential:
+        name: "ssh-dev"
+        credential_type: "Machine"
+        organization: "Default"
+        inputs:
+          username: "ubuntu"
+          ssh_key_data: "{{ vault_ssh_key }}"
+        state: present
+
+    - name: Projekt — kod z Gita (zawsze aktualny)
+      awx.awx.project:
+        name: "szkolenie_projekt"
+        organization: "Default"
+        scm_type: "git"
+        scm_url: "https://github.com/sirkubax/for_awx.git"
+        scm_branch: "main"
+        scm_update_on_launch: true            # sync z Git przy kazdym uruchomieniu
+        state: present
+
+    - name: Inventory
+      awx.awx.inventory:
+        name: "DEV"
+        organization: "Default"
+        state: present
+
+    - name: Job Template — klikalny "przycisk" dla operatora
+      awx.awx.job_template:
+        name: "Deploy DEV"
+        job_type: "run"
+        project: "szkolenie_projekt"
+        playbook: "site.yml"
+        inventory: "DEV"
+        credentials:
+          - "ssh-dev"
+        ask_variables_on_launch: true         # pozwol podac -e przez web (survey)
+        state: present
+
+    - name: Nadaj zespolowi deweloperow prawo URUCHAMIANIA (nie edycji)
+      awx.awx.role:
+        team: "deweloperzy"
+        job_template: "Deploy DEV"
+        role: "execute"                       # Execute = moga Launch, nie moga zmieniac
+        state: present

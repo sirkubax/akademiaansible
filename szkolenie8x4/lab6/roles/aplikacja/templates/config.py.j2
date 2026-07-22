@@ -1,0 +1,14 @@
+# Wygenerowano przez Ansible — rola: aplikacja
+#
+# TODO: uzupelnij DB_HOST — adres IP PIERWSZEGO hosta z grupy 'databases'.
+#   Rozloz wyrazenie na czynniki:
+#     groups['databases']       → lista hostow w grupie databases
+#     groups['databases'][0]    → nazwa pierwszego hosta (np. 'web01')
+#     hostvars['web01']         → fakty tego hosta
+#     hostvars['web01'].ansible_default_ipv4.address → jego adres IP
+#   Zlacz to w jedno wyrazenie Jinja i wstaw w miejsce slowa TODO ponizej.
+#
+DB_HOST = "TODO"
+DB_USER = "{{ db_user }}"
+DB_PASS = "{{ db_haslo }}"
+DB_NAME = "{{ db_nazwa }}"

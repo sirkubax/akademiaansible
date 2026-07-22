@@ -1,0 +1,64 @@
+---
+# LAB 8 — Czesc B: delegowanie i powtarzanie.
+# Uruchomienie (2 hosty z inventory):
+#   ansible-playbook -i inventory/hosts.yml delegacja.yml
+#
+# Uzupelnij miejsca oznaczone # TODO.
+
+- name: Ciekawostki — delegacja i powtarzanie
+  hosts: appservers          # app-a, app-b (lokalne)
+  gather_facts: false
+
+  vars:
+    katalog: /tmp/szkolenie8x4
+
+  tasks:
+
+    - name: Katalog roboczy (na kazdym hoscie)
+      ansible.builtin.file:
+        path: "{{ katalog }}"
+        state: directory
+        mode: '0755'
+
+    # --- run_once + delegate_to: wykonaj RAZ dla calej grupy, na 1. hoscie ---
+    - name: Migracja bazy — TYLKO RAZ (nie z kazdego app-hosta)
+      # TODO: dodaj  run_once: true  oraz  delegate_to: "{{ groups['appservers'][0] }}"
+      ansible.builtin.debug:
+        msg: "Migracja uruchomiona jeden raz, z hosta {{ inventory_hostname }}"
+
+    # --- delegate_to: localhost — typowe dla wywolan API z control node ---
+    - name: Zarejestruj host w (udawanym) monitoringu — z CONTROL NODE
+      # TODO: dodaj  delegate_to: localhost
+      #   Zauwaz: task nalezy do app-a/app-b (kontekst hosta),
+      #   ale WYKONA sie na control node.
+      ansible.builtin.copy:
+        content: "zarejestrowano {{ inventory_hostname }}\n"
+        dest: "{{ katalog }}/monitoring_{{ inventory_hostname }}.txt"
+        mode: '0644'
+
+    # --- until/retries: powtarzaj az warunek spelniony ---
+    - name: Zresetuj licznik prob (raz)
+      ansible.builtin.copy:
+        content: "0"
+        dest: "{{ katalog }}/licznik"
+        mode: '0644'
+      run_once: true
+      delegate_to: localhost
+
+    - name: until — udaje sie dopiero za 3. razem
+      ansible.builtin.shell: |
+        f={{ katalog }}/licznik
+        n=$(cat "$f" 2>/dev/null || echo 0); n=$((n+1)); echo "$n" > "$f"; echo "$n"
+      register: proba
+      # TODO: dodaj powtarzanie:
+      #   until:   proba.stdout | int >= 3
+      #   retries: 5
+      #   delay:   1
+      run_once: true
+      delegate_to: localhost
+      changed_when: false
+
+    - name: Pokaz, po ilu probach sie udalo
+      ansible.builtin.debug:
+        msg: "Sukces przy wartosci licznika = {{ proba.stdout }}"
+      run_once: true

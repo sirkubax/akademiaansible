@@ -1,0 +1,6 @@
+# Wygenerowano przez Ansible — rola: aplikacja (ROZWIAZANIE)
+# DB_HOST: adres IP pierwszego hosta z grupy 'databases' — odczytany z inventory.
+DB_HOST = "{{ hostvars[groups['databases'][0]].ansible_default_ipv4.address }}"
+DB_USER = "{{ db_user }}"
+DB_PASS = "{{ db_haslo }}"
+DB_NAME = "{{ db_nazwa }}"

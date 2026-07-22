@@ -1,0 +1,44 @@
+---
+# Odczyt sekretu z vaulta — BEZ ujawniania jego wartosci w logu.
+# Uruchomienie (haslo vaulta w pliku):
+#   ansible-playbook czytaj_sekret.yml --vault-password-file ../.vault_pass
+# albo interaktywnie:
+#   ansible-playbook czytaj_sekret.yml --ask-vault-pass
+
+- name: Odczyt sekretu z vaulta
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars_files:
+    - vars.yml
+    - vault.yml            # zaszyfrowany — Ansible odszyfruje w pamieci
+
+  tasks:
+    - name: Potwierdz, ze sekret zostal zaladowany (bez pokazywania wartosci)
+      ansible.builtin.assert:
+        that:
+          - db_haslo is defined
+          - db_haslo | length > 0
+        success_msg: "OK — db_haslo zaladowane ({{ db_haslo | length }} znakow); wartosc pozostaje ukryta"
+        fail_msg: "Brak sekretu — czy podales haslo vaulta (--vault-password-file / --ask-vault-pass)?"
+
+    - name: Uzyj sekretu, ale NIE drukuj go
+      ansible.builtin.debug:
+        msg: "Laczenie jako {{ db_user }}, haslo: {{ 'ustawione' if db_haslo else 'BRAK' }}"
+
+    - name: Katalog na plik wynikowy
+      ansible.builtin.file:
+        path: /tmp/szkolenie8x4
+        state: directory
+        mode: '0755'
+
+    - name: Zapisz plik konfiguracyjny z sekretem (no_log chroni log!)
+      ansible.builtin.copy:
+        content: |
+          [db]
+          user={{ db_user }}
+          password={{ db_haslo }}
+        dest: /tmp/szkolenie8x4/db_config.ini
+        mode: '0600'
+      no_log: true          # bez tego --diff/-v moglby wyswietlic haslo!
